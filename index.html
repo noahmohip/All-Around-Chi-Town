@@ -20,10 +20,8 @@
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-  body { background: var(--black); color: var(--white); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+  body { background: var(--black); color: var(--white); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; }
 
-  .cursor { width: 12px; height: 12px; background: var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; mix-blend-mode: difference; }
-  .cursor-ring { width: 36px; height: 36px; border: 1px solid var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; opacity: 0.6; }
   body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.03; pointer-events: none; z-index: 9000; }
 
   /* NAV */
@@ -230,7 +228,7 @@
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: rgba(201,168,76,0.4); }
   .form-group textarea { resize: vertical; min-height: 100px; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .form-submit { width: 100%; padding: 1rem; background: var(--gold); color: var(--black); border: none; font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; cursor: none; transition: background 0.25s, transform 0.2s; position: relative; overflow: hidden; }
+  .form-submit { width: 100%; padding: 1rem; background: var(--gold); color: var(--black); border: none; font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; transition: background 0.25s, transform 0.2s; position: relative; overflow: hidden; }
   .form-submit::after { content: ''; position: absolute; inset: 0; background: var(--gold-light); transform: translateX(-100%); transition: transform 0.35s; }
   .form-submit:hover::after { transform: translateX(0); }
   .form-submit span { position: relative; z-index: 1; }
@@ -291,8 +289,6 @@
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -304,7 +300,7 @@
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="https://allaroundchitown.wixsite.com/allaroundchitown/book-online" target="_blank" class="nav-book">Book Now</a></li>
+    <li><a href="#contact" class="nav-book">Book Now</a></li>
   </ul>
   <div class="hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -330,7 +326,7 @@
     </h1>
     <p class="hero-tagline">All Around Chi-Town brings the ultimate 360-degree video photobooth to your event — unforgettable moments, stunning slow-motion, memories that last forever.</p>
     <div class="hero-ctas">
-      <a href="https://allaroundchitown.wixsite.com/allaroundchitown/book-online" target="_blank" class="btn-primary"><span>Book Your Event</span></a>
+      <a href="#contact" class="btn-primary"><span>Book Your Event</span></a>
       <a href="#showcase" class="btn-outline">See the Videos</a>
     </div>
   </div>
@@ -490,7 +486,7 @@
         <li>Free Delivery</li>
         <li>Instant Digital Share</li>
       </ul>
-      <a href="https://allaroundchitown.wixsite.com/allaroundchitown/book-online" target="_blank" class="btn-outline">Book This Package</a>
+      <a href="#contact" class="btn-outline">Book This Package</a>
     </div>
     <div class="package-card featured reveal reveal-delay-2">
       <div class="package-hours">4 Hours</div>
@@ -503,7 +499,7 @@
         <li>Free Delivery</li>
         <li>Instant Digital Share</li>
       </ul>
-      <a href="https://allaroundchitown.wixsite.com/allaroundchitown/book-online" target="_blank" class="btn-primary"><span>Book This Package</span></a>
+      <a href="#contact" class="btn-primary"><span>Book This Package</span></a>
     </div>
     <div class="package-card reveal reveal-delay-3">
       <div class="package-hours">Custom</div>
@@ -526,7 +522,7 @@
   <div class="gallery-intro">
     <div class="section-tag reveal">Moments Captured</div>
     <h2 class="section-h2 reveal reveal-delay-1">The <em>Gallery</em></h2>
-    <a href="https://allaroundchitown.wixsite.com/allaroundchitown/gallery" target="_blank" class="btn-outline reveal" style="margin-top:0.5rem;">View Full Gallery</a>
+    <a href="#gallery" class="btn-outline reveal" style="margin-top:0.5rem;">View Full Gallery</a>
   </div>
 
   <!-- 3 real videos -->
@@ -637,7 +633,7 @@
         </div>
         <div class="contact-item">
           <div class="contact-icon">🔗</div>
-          <div class="contact-detail"><h4>Book Online</h4><a href="https://allaroundchitown.wixsite.com/allaroundchitown/book-online" target="_blank">allaroundchitown.wixsite.com</a></div>
+          <div class="contact-detail"><h4>Book Your Event</h4><p>Fill out the form and we'll get back to you!</p></div>
         </div>
         <div class="contact-item">
           <div class="contact-icon">📱</div>
@@ -680,18 +676,6 @@
 </footer>
 
 <script>
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-  function animCursor(){
-    cursor.style.transform=`translate(${mx-6}px,${my-6}px)`;
-    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-    ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;
-    requestAnimationFrame(animCursor);
-  }
-  animCursor();
-
   const nav=document.getElementById('nav');
   window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
 
