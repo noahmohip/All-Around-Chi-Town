@@ -691,7 +691,6 @@
           model.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
           scene.add(model);
           window._boothModel = model;
-          // Hide the note banner
           const note = document.querySelector('.booth3d-glb-note');
           if (note) note.style.display = 'none';
         });
