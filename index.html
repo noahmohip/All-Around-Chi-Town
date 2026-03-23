@@ -261,6 +261,21 @@
   .reveal-delay-3 { transition-delay: 0.3s; }
   .reveal-delay-4 { transition-delay: 0.4s; }
 
+  /* 3D BOOTH SECTION */
+  #booth3d { background: var(--dark); position: relative; overflow: hidden; padding: 6rem 4rem; text-align: center; }
+  #booth3d::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.025) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; }
+  #booth3d::after { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 65%); pointer-events: none; }
+  .booth3d-header { position: relative; z-index: 2; margin-bottom: 2.5rem; }
+  .booth3d-header p { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--gray); max-width: 480px; margin: 1rem auto 0; }
+  #booth-canvas-wrap { position: relative; z-index: 2; width: 100%; max-width: 700px; margin: 0 auto; aspect-ratio: 1; }
+  #booth-canvas { width: 100%; height: 100%; display: block; border-radius: 50%; }
+  .booth3d-controls { position: relative; z-index: 2; margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 1.5rem; }
+  .booth3d-ctrl-btn { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gray); background: transparent; border: 1px solid rgba(201,168,76,0.2); padding: 0.5rem 1.25rem; cursor: pointer; transition: all 0.25s; }
+  .booth3d-ctrl-btn:hover, .booth3d-ctrl-btn.active { border-color: var(--gold); color: var(--gold); }
+  .booth3d-hint { font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gray); margin-top: 1rem; opacity: 0.6; position: relative; z-index: 2; }
+  .booth3d-glb-note { position: relative; z-index: 2; margin-top: 2rem; display: inline-block; background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.15); padding: 0.75rem 1.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dim); }
+  .booth3d-glb-note strong { color: var(--gold); }
+
   /* MOBILE */
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
@@ -299,6 +314,7 @@
 <nav id="nav">
   <a href="#" class="nav-logo"><img src="logo.png" alt="All Around Chi-Town Logo"></a>
   <ul class="nav-links" id="navLinks">
+    <li><a href="#booth3d">The Booth</a></li>
     <li><a href="#showcase">Videos</a></li>
     <li><a href="#how">How It Works</a></li>
     <li><a href="#packages">Packages</a></li>
@@ -359,6 +375,358 @@
     <div class="marquee-item">Weddings &amp; Birthdays</div>
   </div>
 </div>
+
+<!-- 3D BOOTH MODEL -->
+<section id="booth3d">
+  <div class="booth3d-header">
+    <div class="section-tag reveal">The Machine</div>
+    <h2 class="section-h2 reveal reveal-delay-1">The <em>Booth</em></h2>
+    <p class="reveal reveal-delay-2">Drag to rotate. See every angle of our setup before your event.</p>
+  </div>
+
+  <div id="booth-canvas-wrap">
+    <canvas id="booth-canvas"></canvas>
+  </div>
+
+  <div class="booth3d-controls">
+    <button class="booth3d-ctrl-btn active" id="btn-spin" onclick="toggleSpin(this)">⟳ Auto Spin</button>
+    <button class="booth3d-ctrl-btn" id="btn-top" onclick="setView('top')">Top View</button>
+    <button class="booth3d-ctrl-btn" id="btn-front" onclick="setView('front')">Front View</button>
+    <button class="booth3d-ctrl-btn" id="btn-side" onclick="setView('side')">Side View</button>
+  </div>
+  <div class="booth3d-hint">Drag to rotate · Scroll to zoom</div>
+
+  <!-- Swap message — remove once you have the .glb file -->
+  <div class="booth3d-glb-note">
+    To use your SketchUp model: export as <strong>.glb</strong> from SketchUp → File → Export → 3D Model → GLTF
+  </div>
+</section>
+
+<!-- Three.js 3D Booth Script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function() {
+  const canvas = document.getElementById('booth-canvas');
+  const wrap   = document.getElementById('booth-canvas-wrap');
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.3;
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+  camera.position.set(0, 3.2, 7);
+  camera.lookAt(0, 1.2, 0);
+
+  function resize() { const w = wrap.offsetWidth; renderer.setSize(w, w); }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // ── MATERIALS ──────────────────────────────────────────────
+  const matBlack = new THREE.MeshStandardMaterial({ color: 0x111010, metalness: 0.6, roughness: 0.4 });
+  const matDark  = new THREE.MeshStandardMaterial({ color: 0x1a1917, metalness: 0.5, roughness: 0.5 });
+  const matGold  = new THREE.MeshStandardMaterial({ color: 0xc9a84c, metalness: 0.9, roughness: 0.15 });
+  const matWhite = new THREE.MeshStandardMaterial({ color: 0xf0efed, metalness: 0.1, roughness: 0.6 });
+  const matLens  = new THREE.MeshStandardMaterial({ color: 0x223344, metalness: 0.05, roughness: 0.05, transparent: true, opacity: 0.85 });
+  const matLED   = new THREE.MeshStandardMaterial({ color: 0xffe8a0, emissive: 0xffe8a0, emissiveIntensity: 2.5 });
+  const matSkin  = new THREE.MeshStandardMaterial({ color: 0x9e8073, roughness: 0.8 });
+  const matShirt = new THREE.MeshStandardMaterial({ color: 0x8fa0c0, roughness: 0.9 });
+  const matPants = new THREE.MeshStandardMaterial({ color: 0x455276, roughness: 0.85 });
+  const matShoe  = new THREE.MeshStandardMaterial({ color: 0x5a4030, roughness: 0.8 });
+
+  const boothGroup = new THREE.Group();
+
+  // ── PLATFORM ───────────────────────────────────────────────
+  // Main disc - matches the black circular platform in screenshot
+  const discGeo = new THREE.CylinderGeometry(1.6, 1.7, 0.1, 64);
+  boothGroup.add(Object.assign(new THREE.Mesh(discGeo, matBlack), { position: new THREE.Vector3(0, 0.05, 0), receiveShadow: true }));
+
+  // Top surface (slightly lighter)
+  const topGeo = new THREE.CylinderGeometry(1.58, 1.58, 0.02, 64);
+  const topMesh = new THREE.Mesh(topGeo, new THREE.MeshStandardMaterial({ color: 0x222120, metalness: 0.4, roughness: 0.6 }));
+  topMesh.position.y = 0.11;
+  boothGroup.add(topMesh);
+
+  // Spokes (8 spokes like in the thumbnail)
+  for (let i = 0; i < 8; i++) {
+    const spokeGeo = new THREE.BoxGeometry(1.45, 0.025, 0.055);
+    const spoke = new THREE.Mesh(spokeGeo, new THREE.MeshStandardMaterial({ color: 0x2a2826, metalness: 0.5, roughness: 0.5 }));
+    spoke.position.set(0, 0.12, 0);
+    spoke.rotation.y = (i / 8) * Math.PI * 2;
+    spoke.translateX(0.72);
+    boothGroup.add(spoke);
+  }
+
+  // Center hub
+  const hubGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.04, 24);
+  const hub = new THREE.Mesh(hubGeo, matBlack);
+  hub.position.y = 0.12;
+  boothGroup.add(hub);
+
+  // Gold outer rim ring
+  const rimGeo = new THREE.TorusGeometry(1.62, 0.03, 10, 80);
+  const rim = new THREE.Mesh(rimGeo, matGold);
+  rim.rotation.x = Math.PI / 2;
+  rim.position.y = 0.1;
+  boothGroup.add(rim);
+
+  // LED ring just inside rim
+  const ledGeo = new THREE.TorusGeometry(1.45, 0.018, 8, 80);
+  const ledRing = new THREE.Mesh(ledGeo, matLED);
+  ledRing.rotation.x = Math.PI / 2;
+  ledRing.position.y = 0.12;
+  boothGroup.add(ledRing);
+
+  // ── VERTICAL POLE ──────────────────────────────────────────
+  // Pole sits at the edge of the platform, matches the screenshot
+  const poleGeo = new THREE.CylinderGeometry(0.055, 0.065, 3.6, 16);
+  const pole = new THREE.Mesh(poleGeo, matBlack);
+  pole.position.set(-1.3, 1.92, 0);
+  pole.castShadow = true;
+  boothGroup.add(pole);
+
+  // Base collar (gold)
+  const collarGeo = new THREE.CylinderGeometry(0.13, 0.15, 0.2, 16);
+  boothGroup.add(Object.assign(new THREE.Mesh(collarGeo, matGold), { position: new THREE.Vector3(-1.3, 0.23, 0) }));
+
+  // Pole cap (gold)
+  const capGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.07, 16);
+  boothGroup.add(Object.assign(new THREE.Mesh(capGeo, matGold), { position: new THREE.Vector3(-1.3, 3.76, 0) }));
+
+  // ── ARM ────────────────────────────────────────────────────
+  const armGroup = new THREE.Group();
+  armGroup.position.set(-1.3, 2.9, 0);
+
+  // Main arm tube (horizontal)
+  const armGeo = new THREE.CylinderGeometry(0.038, 0.038, 3.2, 12);
+  armGeo.applyMatrix4(new THREE.Matrix4().makeRotationZ(Math.PI / 2));
+  const armMesh = new THREE.Mesh(armGeo, matBlack);
+  armMesh.position.x = 1.6;
+  armMesh.castShadow = true;
+  armGroup.add(armMesh);
+
+  // Arm-to-pole joint (gold sphere)
+  armGroup.add(Object.assign(new THREE.Mesh(new THREE.SphereGeometry(0.085, 16, 16), matGold)));
+
+  // Arm clamp at pole
+  const clampGeo = new THREE.BoxGeometry(0.15, 0.18, 0.15);
+  armGroup.add(Object.assign(new THREE.Mesh(clampGeo, matDark), { position: new THREE.Vector3(0.1, 0, 0) }));
+
+  // ── CAMERA HEAD ────────────────────────────────────────────
+  const camGroup = new THREE.Group();
+  camGroup.position.set(3.2, 0, 0);
+
+  // Camera body (black box)
+  camGroup.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.22, 0.24), matBlack), { castShadow: true }));
+
+  // Lens barrel
+  const lensBGeo = new THREE.CylinderGeometry(0.072, 0.072, 0.07, 24);
+  lensBGeo.applyMatrix4(new THREE.Matrix4().makeRotationX(Math.PI / 2));
+  const lensB = new THREE.Mesh(lensBGeo, matBlack);
+  lensB.position.z = 0.15;
+  camGroup.add(lensB);
+
+  // Lens glass
+  const lensGGeo = new THREE.CylinderGeometry(0.054, 0.054, 0.02, 24);
+  lensGGeo.applyMatrix4(new THREE.Matrix4().makeRotationX(Math.PI / 2));
+  const lensG = new THREE.Mesh(lensGGeo, matLens);
+  lensG.position.z = 0.185;
+  camGroup.add(lensG);
+
+  // Ring light (white diffuser ring around lens — matches DIFUSOR BRANCO material)
+  const ringLightGeo = new THREE.TorusGeometry(0.1, 0.022, 8, 32);
+  const ringLightMesh = new THREE.Mesh(ringLightGeo, matLED);
+  ringLightMesh.position.z = 0.14;
+  camGroup.add(ringLightMesh);
+
+  // Mount arm connecting camera to arm
+  const mountGeo = new THREE.BoxGeometry(0.055, 0.28, 0.055);
+  camGroup.add(Object.assign(new THREE.Mesh(mountGeo, matGold), { position: new THREE.Vector3(0, 0.24, 0) }));
+
+  // Mount bolt
+  camGroup.add(Object.assign(new THREE.Mesh(new THREE.SphereGeometry(0.038, 8, 8), matGold), { position: new THREE.Vector3(0, 0.38, 0) }));
+
+  armGroup.add(camGroup);
+  boothGroup.add(armGroup);
+
+  // ── PERSON FIGURE ─────────────────────────────────────────
+  // Matches the Niraj figure visible in the SKP thumbnail
+  const personGroup = new THREE.Group();
+  personGroup.position.set(0.1, 0.12, 0.1);
+
+  // Torso (shirt)
+  const torsoGeo = new THREE.BoxGeometry(0.38, 0.52, 0.22);
+  personGroup.add(Object.assign(new THREE.Mesh(torsoGeo, matShirt), { position: new THREE.Vector3(0, 1.25, 0), castShadow: true }));
+
+  // Head
+  const headGeo = new THREE.SphereGeometry(0.15, 16, 16);
+  personGroup.add(Object.assign(new THREE.Mesh(headGeo, matSkin), { position: new THREE.Vector3(0, 1.72, 0), castShadow: true }));
+
+  // Neck
+  personGroup.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.07, 0.12, 12), matSkin), { position: new THREE.Vector3(0, 1.55, 0) }));
+
+  // Pants (two legs)
+  const legGeo = new THREE.BoxGeometry(0.155, 0.52, 0.18);
+  personGroup.add(Object.assign(new THREE.Mesh(legGeo, matPants), { position: new THREE.Vector3(-0.1, 0.72, 0), castShadow: true }));
+  personGroup.add(Object.assign(new THREE.Mesh(legGeo, matPants), { position: new THREE.Vector3(0.1, 0.72, 0), castShadow: true }));
+
+  // Shoes
+  const shoeGeo = new THREE.BoxGeometry(0.14, 0.07, 0.24);
+  personGroup.add(Object.assign(new THREE.Mesh(shoeGeo, matShoe), { position: new THREE.Vector3(-0.1, 0.44, 0.04) }));
+  personGroup.add(Object.assign(new THREE.Mesh(shoeGeo, matShoe), { position: new THREE.Vector3( 0.1, 0.44, 0.04) }));
+
+  // Arms (crossed, like thumbnail)
+  const armLGeo = new THREE.BoxGeometry(0.35, 0.1, 0.1);
+  const leftArm = new THREE.Mesh(armLGeo, matShirt);
+  leftArm.position.set(-0.22, 1.18, 0.12);
+  leftArm.rotation.z = 0.35;
+  personGroup.add(leftArm);
+  const rightArm = new THREE.Mesh(armLGeo, matShirt);
+  rightArm.position.set(0.22, 1.18, 0.12);
+  rightArm.rotation.z = -0.35;
+  personGroup.add(rightArm);
+
+  boothGroup.add(personGroup);
+
+  boothGroup.position.y = -0.5;
+  scene.add(boothGroup);
+
+  // ── FLOOR ──────────────────────────────────────────────────
+  const floorMesh = new THREE.Mesh(
+    new THREE.CircleGeometry(5, 64),
+    new THREE.MeshStandardMaterial({ color: 0x0c0b0a, metalness: 0.85, roughness: 0.25 })
+  );
+  floorMesh.rotation.x = -Math.PI / 2;
+  floorMesh.position.y = -0.5;
+  floorMesh.receiveShadow = true;
+  scene.add(floorMesh);
+
+  // ── LIGHTING ───────────────────────────────────────────────
+  scene.add(new THREE.AmbientLight(0xfff5e0, 0.45));
+
+  const key = new THREE.DirectionalLight(0xfff0c0, 2.8);
+  key.position.set(5, 8, 5);
+  key.castShadow = true;
+  key.shadow.mapSize.set(2048, 2048);
+  scene.add(key);
+
+  const fill = new THREE.DirectionalLight(0x4a6aff, 0.7);
+  fill.position.set(-5, 3, -4);
+  scene.add(fill);
+
+  const rim = new THREE.DirectionalLight(0xc9a84c, 1.8);
+  rim.position.set(0, 5, -6);
+  scene.add(rim);
+
+  const ptLight = new THREE.PointLight(0xffe8a0, 1.0, 8);
+  ptLight.position.set(0, 0.2, 0);
+  scene.add(ptLight);
+
+  const spot = new THREE.SpotLight(0xfff5d0, 2.5, 14, Math.PI / 6, 0.5);
+  spot.position.set(0, 9, 0);
+  spot.target.position.set(0, 0, 0);
+  scene.add(spot);
+  scene.add(spot.target);
+
+  // ── CONTROLS ───────────────────────────────────────────────
+  let isDragging = false, prevX = 0, prevY = 0;
+  let rotY = 0.3, rotX = 0.18;
+  let autoSpin = true;
+  let targetRotY = rotY, targetRotX = rotX;
+  let zoom = 7, targetZoom = 7;
+
+  canvas.addEventListener('mousedown', e => {
+    isDragging = true; prevX = e.clientX; prevY = e.clientY;
+    autoSpin = false; document.getElementById('btn-spin').classList.remove('active');
+  });
+  canvas.addEventListener('touchstart', e => {
+    isDragging = true; prevX = e.touches[0].clientX; prevY = e.touches[0].clientY; autoSpin = false;
+  }, { passive: true });
+  window.addEventListener('mouseup', () => isDragging = false);
+  window.addEventListener('touchend', () => isDragging = false);
+  canvas.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    targetRotY += (e.clientX - prevX) * 0.011;
+    targetRotX = Math.max(-0.4, Math.min(0.8, targetRotX + (e.clientY - prevY) * 0.007));
+    prevX = e.clientX; prevY = e.clientY;
+  });
+  canvas.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    targetRotY += (e.touches[0].clientX - prevX) * 0.011;
+    prevX = e.touches[0].clientX;
+  }, { passive: true });
+  canvas.addEventListener('wheel', e => {
+    e.preventDefault();
+    targetZoom = Math.max(3.5, Math.min(11, targetZoom + e.deltaY * 0.01));
+  }, { passive: false });
+
+  window.toggleSpin = btn => { autoSpin = !autoSpin; btn.classList.toggle('active', autoSpin); };
+  window.setView = v => {
+    autoSpin = false; document.getElementById('btn-spin').classList.remove('active');
+    if (v === 'top')   { targetRotX = 1.35; targetRotY = 0;           targetZoom = 5; }
+    if (v === 'front') { targetRotX = 0.18; targetRotY = 0;           targetZoom = 7; }
+    if (v === 'side')  { targetRotX = 0.18; targetRotY = Math.PI / 2; targetZoom = 7; }
+  };
+
+  // ── AUTO-LOAD GLB WHEN AVAILABLE ───────────────────────────
+  // Drop booth_foto_360.glb in the same folder → it loads automatically
+  const glbScript = document.createElement('script');
+  glbScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/loaders/GLTFLoader.js';
+  glbScript.onload = () => {
+    fetch('booth_foto_360.glb', { method: 'HEAD' })
+      .then(r => {
+        if (!r.ok) return;
+        new THREE.GLTFLoader().load('booth_foto_360.glb', gltf => {
+          scene.remove(boothGroup);
+          const model = gltf.scene;
+          const box   = new THREE.Box3().setFromObject(model);
+          const size  = box.getSize(new THREE.Vector3());
+          const scale = 3.5 / Math.max(size.x, size.y, size.z);
+          model.scale.setScalar(scale);
+          const center = box.getCenter(new THREE.Vector3());
+          model.position.set(-center.x * scale, -center.y * scale - 0.3, -center.z * scale);
+          model.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
+          scene.add(model);
+          window._boothModel = model;
+          // Hide the note banner
+          const note = document.querySelector('.booth3d-glb-note');
+          if (note) note.style.display = 'none';
+        });
+      }).catch(() => {});
+  };
+  document.head.appendChild(glbScript);
+
+  // ── RENDER LOOP ─────────────────────────────────────────────
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+
+    if (autoSpin) targetRotY += 0.007;
+    rotY += (targetRotY - rotY) * 0.07;
+    rotX += (targetRotX - rotX) * 0.07;
+    zoom += (targetZoom - zoom) * 0.07;
+
+    const active = window._boothModel || boothGroup;
+    active.rotation.y = rotY;
+    active.rotation.x = rotX;
+
+    camera.position.set(0, 2.5 + rotX * 1.2, zoom);
+    camera.lookAt(0, 1.0, 0);
+
+    // Pulse LED
+    ledRing.material.emissiveIntensity = 2.0 + Math.sin(t * 2.5) * 0.6;
+    ringLightMesh.material.emissiveIntensity = 2.0 + Math.sin(t * 2.5 + 1) * 0.6;
+    ptLight.intensity = 0.8 + Math.sin(t * 2) * 0.25;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
 
 <!-- VIDEO SHOWCASE -->
 <section id="showcase">
