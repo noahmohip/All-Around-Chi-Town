@@ -104,7 +104,7 @@
   .how-header { text-align: center; margin-bottom: 5rem; position: relative; z-index: 1; }
   .how-header p { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--gray); max-width: 480px; margin: 1.5rem auto 0; line-height: 1.7; }
   .how-steps-row { display: grid; grid-template-columns: 1fr 80px 1fr 80px 1fr; align-items: start; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
-  .how-step-card { display: flex; flex-direction: column; align-items: center; text-align: center; opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+  .how-step-card { display: flex; flex-direction: column; align-items: center; text-align: center; opacity: 1; transform: none; transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
   .how-step-card.visible { opacity: 1; transform: translateY(0); }
   .how-step-card:nth-child(3) { transition-delay: 0.15s; }
   .how-step-card:nth-child(5) { transition-delay: 0.3s; }
@@ -268,9 +268,12 @@
   .footer-logo img { height: 80px; width: auto; filter: drop-shadow(0 2px 10px rgba(201,168,76,0.3)); position: relative; z-index: 1; }
   .footer-copy { font-size: 0.78rem; color: var(--gray); }
 
-  /* REVEAL */
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
+  /* REVEAL — content always visible, JS adds animation class */
+  .reveal { opacity: 1; transform: none; transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+  .js-loaded .reveal { opacity: 0; transform: translateY(24px); }
+  .js-loaded .reveal.visible { opacity: 1; transform: translateY(0); }
+  .js-loaded .how-step-card { opacity: 0; transform: translateY(30px); }
+  .js-loaded .how-step-card.visible { opacity: 1; transform: translateY(0); }
   .reveal-delay-1 { transition-delay: 0.1s; }
   .reveal-delay-2 { transition-delay: 0.2s; }
   .reveal-delay-3 { transition-delay: 0.3s; }
@@ -566,9 +569,9 @@
   <div class="hero-content">
     <div class="hero-tag">Chicago's Premier 360° Experience</div>
     <h1 class="hero-h1">
-      Your Party<br>
-      Goes <em>Viral</em><br>
-      Tonight
+      The Party
+      <br>They Never<br>
+      <em>Forget</em>
     </h1>
     <p class="hero-tagline">The 360° booth that makes your event the one everyone keeps talking about. Slow-motion cinematic videos, delivered to every guest instantly — a moment they'll treasure forever.</p>
     <div class="hero-ctas">
@@ -1452,6 +1455,8 @@
 // ║  ALL AROUND CHI-TOWN — SITE CONFIGURATION           ║
 // ║  Fill in your keys after following SETUP.md         ║
 // ╚══════════════════════════════════════════════════════╝
+document.body.classList.add('js-loaded');
+
 const SITE_CONFIG = {
   // ── Backend API URL (update after deploying to Railway) ──
   api_url: 'https://your-backend.railway.app',
