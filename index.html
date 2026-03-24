@@ -169,7 +169,11 @@
   .package-features li::before { content: ''; width: 16px; height: 1px; background: var(--gold); flex-shrink: 0; }
   .package-features li.highlight { color: var(--gold-light); font-weight: 500; }
   .package-features li.highlight::before { background: var(--gold-light); }
-  .package-card .btn-primary, .package-card .btn-outline { width: 100%; text-align: center; display: block; }
+  .package-tagline { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: var(--gray); font-style: italic; margin-bottom: 1.5rem; line-height: 1.5; }
+  .package-card.featured .package-tagline { color: rgba(245,240,234,0.65); }
+  .packages-urgency { max-width: 1100px; margin: 1.5rem auto 0; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gray); }
+  .packages-urgency strong { color: var(--gold); animation: pulse-gold 2s ease-in-out infinite; }
+  @keyframes pulse-gold { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
 
   /* GALLERY */
   #gallery { background: var(--black); padding-bottom: 0; text-align: center; }
@@ -542,7 +546,7 @@
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#availability">Availability</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="#contact" class="nav-book">Book Now</a></li>
+    <li><a href="#availability" class="nav-book">Check Your Date</a></li>
   </ul>
   <div class="hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -562,14 +566,14 @@
   <div class="hero-content">
     <div class="hero-tag">Chicago's Premier 360° Experience</div>
     <h1 class="hero-h1">
-      360<br>
-      <em>Degrees</em><br>
-      of Fun
+      Your Party<br>
+      Goes <em>Viral</em><br>
+      Tonight
     </h1>
-    <p class="hero-tagline">All Around Chi-Town brings the ultimate 360-degree video photobooth to your event — unforgettable moments, stunning slow-motion, memories that last forever.</p>
+    <p class="hero-tagline">The 360° booth that makes your event the one everyone keeps talking about. Slow-motion cinematic videos, delivered to every guest instantly — a moment they'll treasure forever.</p>
     <div class="hero-ctas">
-      <a href="#contact" class="btn-primary"><span>Book Your Event</span></a>
-      <a href="#showcase" class="btn-outline">See the Videos</a>
+      <a href="#availability" class="btn-primary" style="font-size:0.85rem;padding:1.1rem 2.8rem;"><span>✦ Check Your Date</span></a>
+      <a href="#showcase" class="btn-outline">Watch the Videos</a>
     </div>
   </div>
   <div class="scroll-hint"><div class="scroll-line"></div>Scroll to Explore</div>
@@ -614,21 +618,21 @@
       <div class="showcase-badge"><div class="showcase-badge-text">✦ Slow Motion &amp; Normal Speed Available</div></div>
     </div>
     <div class="showcase-text">
-      <div class="section-tag reveal">Video Options</div>
-      <h2 class="section-h2 reveal reveal-delay-1">Two Styles,<br><em>One Epic</em><br>Experience</h2>
+      <div class="section-tag reveal">See It In Action</div>
+      <h2 class="section-h2 reveal reveal-delay-1">Your Guests<br>Will Never<br><em>Stop Talking</em></h2>
       <div class="showcase-options">
         <div class="opt-card reveal reveal-delay-2">
           <div class="opt-num">01</div>
           <div class="opt-info">
             <h4>Normal Speed</h4>
-            <p>Full 360° rotation captured in real time — smooth, dynamic, and shareable immediately to any platform.</p>
+            <p>Smooth, clean, and instantly delivered to every guest's phone. A polished video that looks and feels like something out of a music video.</p>
           </div>
         </div>
         <div class="opt-card reveal reveal-delay-3">
           <div class="opt-num">02</div>
           <div class="opt-info">
             <h4>Slow Motion (Fast → Slow)</h4>
-            <p>The arm starts fast and dramatically slows down around the subject — cinematic, jaw-dropping, and guaranteed to go viral.</p>
+            <p>Fast to slow-motion — a cinematic effect so striking your guests will want to watch it over and over. The moment that defines the whole night.</p>
           </div>
         </div>
       </div>
@@ -640,8 +644,8 @@
 <section id="how">
   <div class="how-header">
     <div class="section-tag reveal">The Experience</div>
-    <h2 class="section-h2 reveal reveal-delay-1">How It <em>Works</em></h2>
-    <p class="reveal reveal-delay-2">Three simple steps to the most unforgettable video of your life.</p>
+    <h2 class="section-h2 reveal reveal-delay-1">So Easy<br>It Feels Like <em>Magic</em></h2>
+    <p class="reveal reveal-delay-2">Setup, operation, teardown — all on us. You focus on your guests. We make sure the experience is flawless from start to finish.</p>
   </div>
 
   <div class="how-steps-row">
@@ -725,8 +729,8 @@
         <circle cx="28" cy="10" r="6" fill="#111010" stroke="#c9a84c" stroke-width="1.2"/>
         <path d="M28 6.5l1.2 2.4 2.6.4-1.9 1.8.5 2.6L28 12.5l-2.4 1.2.5-2.6-1.9-1.8 2.6-.4z" fill="#c9a84c"/>
       </svg></span>
-      <div class="how-feature-title">On-Site Attendant</div>
-      <div class="how-feature-desc">A dedicated pro runs the booth so you can focus on the fun.</div>
+      <div class="how-feature-title">We Handle Everything</div>
+      <div class="how-feature-desc">Setup, operation, and teardown — fully handled. You just show up and celebrate.</div>
     </div>
     <div class="how-feature">
       <span class="how-feature-icon"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -737,7 +741,7 @@
         <path d="M15.5 15.5v5l4-2.5z" fill="#c9a84c"/>
       </svg></span>
       <div class="how-feature-title">Unlimited Videos</div>
-      <div class="how-feature-desc">Every guest, every group — no caps, no limits all night long.</div>
+      <div class="how-feature-desc">No caps, no limits. Every single guest gets their moment — all night long.</div>
     </div>
     <div class="how-feature">
       <span class="how-feature-icon"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -749,7 +753,7 @@
         <line x1="4" y1="22" x2="8" y2="22" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/>
       </svg></span>
       <div class="how-feature-title">Instant Delivery</div>
-      <div class="how-feature-desc">Videos sent directly to phones the moment they're captured.</div>
+      <div class="how-feature-desc">Every guest gets their video delivered to their phone the moment it's captured.</div>
     </div>
     <div class="how-feature">
       <span class="how-feature-icon"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -768,21 +772,22 @@
         <path d="M11 16.5c0-1.7 1.3-3 3-3s3 1.3 3 3c0 2-3 4.5-3 4.5s-3-2.5-3-4.5z" stroke="#c9a84c" stroke-width="1.2"/>
         <circle cx="14" cy="16.5" r="1" fill="#c9a84c"/>
       </svg></span>
-      <div class="how-feature-title">Free Delivery</div>
-      <div class="how-feature-desc">We bring the booth to you anywhere in the Chicagoland area.</div>
+      <div class="how-feature-title">Free Delivery Anywhere</div>
+      <div class="how-feature-desc">Chicago and all suburbs. We come to you — zero extra cost.</div>
     </div>
   </div>
 </section>
 
 <!-- PACKAGES -->
 <section id="packages">
-  <div class="section-tag reveal">Pricing</div>
-  <h2 class="section-h2 reveal reveal-delay-1">Choose Your<br><em>Package</em></h2>
+  <div class="section-tag reveal">Simple Pricing. No Surprises.</div>
+  <h2 class="section-h2 reveal reveal-delay-1">Pick Your<br><em>Vibe</em></h2>
   <div class="packages-grid">
     <div class="package-card reveal reveal-delay-1">
-      <div class="package-hours">2 Hours</div>
-      <div class="package-name">2 Hour Spin</div>
+      <div class="package-hours">2 Hours · Perfect for Birthdays &amp; Smaller Events</div>
+      <div class="package-name">The Spin</div>
       <div class="package-price"><sup>$</sup>300</div>
+      <div class="package-tagline">The perfect way to give your guests an experience they've never had before — at a price that makes it easy to say yes.</div>
       <ul class="package-features">
         <li>On-Site Attendant</li>
         <li>Unlimited Videos</li>
@@ -792,12 +797,13 @@
         <li class="highlight">✦ Prop Package Included</li>
         <li class="highlight">✦ Custom Overlay Included</li>
       </ul>
-      <a href="#contact" class="btn-outline">Book This Package</a>
+      <a href="#availability" class="btn-primary"><span>✦ Check Your Date</span></a>
     </div>
     <div class="package-card featured reveal reveal-delay-2">
-      <div class="package-hours">4 Hours</div>
-      <div class="package-name">4 Hour Spin</div>
+      <div class="package-hours">4 Hours · Weddings, Quinceañeras &amp; Big Events</div>
+      <div class="package-name">The Premium</div>
       <div class="package-price"><sup>$</sup>600</div>
+      <div class="package-tagline">The full experience. LED lighting, props, custom overlay, and 4 full hours — for the events that deserve to be remembered.</div>
       <ul class="package-features">
         <li>On-Site Attendant</li>
         <li>Unlimited Videos</li>
@@ -808,12 +814,13 @@
         <li class="highlight">✦ Custom Overlay Included</li>
         <li class="highlight">✦ LED Lighting Upgrade</li>
       </ul>
-      <a href="#contact" class="btn-primary"><span>Book This Package</span></a>
+      <a href="#availability" class="btn-primary"><span>✦ Check Your Date</span></a>
     </div>
     <div class="package-card reveal reveal-delay-3">
-      <div class="package-hours">Custom</div>
-      <div class="package-name">Custom Event</div>
+      <div class="package-hours">Custom Duration · Corporate &amp; Brand Events</div>
+      <div class="package-name">The Experience</div>
       <div class="package-price" style="font-size:1.8rem;align-items:center;padding-top:0.6rem;">Let's Talk</div>
+      <div class="package-tagline">Tailored to your event. Custom branding, flexible duration, and a dedicated team — built to make your occasion stand out.</div>
       <ul class="package-features">
         <li>Corporate Events</li>
         <li>Brand Activations</li>
@@ -822,15 +829,16 @@
         <li class="highlight">✦ Custom Overlay Included</li>
         <li>Flexible Duration</li>
       </ul>
-      <a href="#contact" class="btn-outline">Get a Quote</a>
+      <a href="#availability" class="btn-primary"><span>✦ Get a Custom Quote</span></a>
     </div>
   </div>
+  <div class="packages-urgency">
+    <strong>✦ Weekend dates book out weeks in advance.</strong> &nbsp;Secure yours before it's gone.
+  </div>
 </section>
-
-<!-- ADD-ONS -->
 <section id="addons">
-  <div class="section-tag reveal">Level Up</div>
-  <h2 class="section-h2 reveal reveal-delay-1">Make It <em>Unforgettable</em></h2>
+  <div class="section-tag reveal">Elevate the Experience</div>
+  <h2 class="section-h2 reveal reveal-delay-1">Add-Ons That<br>Make the <em>Difference</em></h2>
 
   <div class="addons-grid" style="grid-template-columns: 1fr 1fr; max-width: 740px;">
 
@@ -855,7 +863,7 @@
     </div>
 
   </div>
-  <p class="addons-note reveal">All add-ons can be included when you <strong>book through the contact form below</strong>. Just mention what you'd like and we'll build a custom quote for your event.</p>
+  <p class="addons-note reveal">Add-ons are confirmed when you book. Just let us know what you'd like — we take care of the rest. <strong>The little extras are what guests remember most.</strong></p>
 </section>
 
 <!-- GALLERY -->
@@ -863,8 +871,8 @@
 
 <!-- EVENT TYPES -->
 <section id="events">
-  <div class="section-tag reveal">Perfect For</div>
-  <h2 class="section-h2 reveal reveal-delay-1">Every <em>Occasion</em></h2>
+  <div class="section-tag reveal">Every Occasion Deserves It</div>
+  <h2 class="section-h2 reveal reveal-delay-1">The Booth That<br>Fits <em>Every Party</em></h2>
 
   <div class="events-grid">
 
@@ -974,8 +982,8 @@
 <!-- GALLERY -->
 <section id="gallery">
   <div class="gallery-intro">
-    <div class="section-tag reveal">Moments Captured</div>
-    <h2 class="section-h2 reveal reveal-delay-1">The <em>Gallery</em></h2>
+    <div class="section-tag reveal">See It For Yourself</div>
+    <h2 class="section-h2 reveal reveal-delay-1">This Could Be<br><em>Your Party</em></h2>
     <a href="#gallery" class="btn-outline reveal" style="margin-top:0.5rem;">View Full Gallery</a>
   </div>
 
@@ -1043,8 +1051,8 @@
 
 <!-- TESTIMONIALS -->
 <section id="testimonials">
-  <div class="section-tag reveal">Kind Words</div>
-  <h2 class="section-h2 reveal reveal-delay-1">What Our <em>Clients Say</em></h2>
+  <div class="section-tag reveal">Heard From Our Clients</div>
+  <h2 class="section-h2 reveal reveal-delay-1">Real Events.<br><em>Real Memories.</em></h2>
 
   <div class="reviews-track-wrap">
     <div class="reviews-track">
@@ -1169,8 +1177,8 @@
   </div>
 
   <div class="testimonials-cta">
-    <p>Have an experience to share? We'd love to hear from you.</p>
-    <a href="#contact" class="btn-outline">Leave a Review</a>
+    <p>Had the booth at your event? We'd love to hear how it went.</p>
+    <a href="#availability" class="btn-primary"><span>✦ Book Your Date</span></a>
   </div>
 </section>
 
@@ -1193,10 +1201,10 @@
       </div>
     </div>
     <div class="about-text">
-      <div class="section-tag reveal">Our Story</div>
-      <h2 class="section-h2 reveal reveal-delay-1">All Around<br><em>Chi-Town</em></h2>
-      <p class="reveal reveal-delay-2">All Around Chi-Town 360 Photobooth Video Rentals is focused on delivering the most advanced photo booth technology to our clients. Our 360 photobooths are equipped with the latest cameras, lighting and software so your guests can create unforgettable moments that look and feel amazing.</p>
-      <p class="reveal reveal-delay-3">Whether you're launching a new product, throwing a corporate event, or celebrating a special occasion, our 360 photobooths are the perfect addition to any event in the Chicagoland area.</p>
+      <div class="section-tag reveal">Who We Are</div>
+      <h2 class="section-h2 reveal reveal-delay-1">Built for<br><em>Chicago</em></h2>
+      <p class="reveal reveal-delay-2">We built All Around Chi-Town to bring something truly special to Chicago events. Professional equipment, experienced on-site staff, and cinematic quality videos — because your event deserves more than average.</p>
+      <p class="reveal reveal-delay-3">From sweet 16s to corporate launches to wedding receptions — every event is an opportunity to create something extraordinary. Free delivery anywhere in Chicagoland.</p>
       <div class="about-stats reveal reveal-delay-4">
         <div class="stat-box"><span class="stat-num">360°</span><span class="stat-label">Full Coverage</span></div>
         <div class="stat-box"><span class="stat-num">∞</span><span class="stat-label">Unlimited Videos</span></div>
@@ -1281,16 +1289,16 @@
   </div>
 
   <div class="faq-cta">
-    <p>Still have a question? We're happy to help.</p>
-    <a href="#contact" class="btn-primary"><span>Get In Touch</span></a>
+    <p>Still have a question? We're quick to respond.</p>
+    <a href="#availability" class="btn-primary"><span>✦ Check Your Date</span></a>
   </div>
 </section>
 
 <!-- AVAILABILITY CALENDAR -->
 <section id="availability">
-  <div class="section-tag reveal">Book Your Date</div>
-  <h2 class="section-h2 reveal reveal-delay-1">Check <em>Availability</em></h2>
-  <p class="cal-subtitle reveal reveal-delay-2">Click any available date to check it for your event, then fill out the form below.</p>
+  <div class="section-tag reveal">Check Your Date</div>
+  <h2 class="section-h2 reveal reveal-delay-1">Is Your Date<br><em>Still Open?</em></h2>
+  <p class="cal-subtitle reveal reveal-delay-2">Click your event date to check availability. If it's open, secure it with a $100 deposit and we'll take care of everything from there.</p>
 
   <div class="cal-container reveal reveal-delay-3">
     <div id="cal-loading" class="cal-loading" style="display:none">Loading calendar...</div>
@@ -1330,7 +1338,7 @@
   <div class="contact-layout">
     <div style="text-align:center;">
       <div class="section-tag reveal">Get In Touch</div>
-      <h2 class="section-h2 reveal reveal-delay-1">Let's Make<br><em>Magic</em><br>Happen</h2>
+      <h2 class="section-h2 reveal reveal-delay-1">Let's Make<br>Your Event<br><em>Go Viral</em></h2>
       <div class="contact-info reveal reveal-delay-2">
         <div class="contact-item">
           <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
