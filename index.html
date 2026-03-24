@@ -866,9 +866,6 @@
   <p class="addons-note reveal">Add-ons are confirmed when you book. Just let us know what you'd like — we take care of the rest. <strong>The little extras are what guests remember most.</strong></p>
 </section>
 
-<!-- GALLERY -->
-<section id="gallery">
-
 <!-- EVENT TYPES -->
 <section id="events">
   <div class="section-tag reveal">Every Occasion Deserves It</div>
@@ -1503,51 +1500,6 @@ function toggleFaq(btn) {
 // ── EMAILJS ───────────────────────────────────────────────
 try { emailjs.init(SITE_CONFIG.emailjs_public_key); } catch(e) {}
 
-function handleSubmit(e) {
-  e.preventDefault();
-  const get = id => document.getElementById(id);
-  const firstName = get('f-firstname').value.trim();
-  const lastName  = get('f-lastname').value.trim();
-  const email     = get('f-email').value.trim();
-  const eventType = get('f-eventtype').value;
-  const date      = get('f-date').value;
-  const pkg       = get('f-package').value;
-  const message   = get('f-message').value.trim();
-  const phone     = get('f-phone').value.trim();
-  const errEl     = get('form-error-msg');
-
-  if (!firstName || !lastName || !email || !eventType || !date || !pkg) {
-    errEl.classList.add('show'); return;
-  }
-  errEl.classList.remove('show');
-
-  const btn    = get('form-submit-btn');
-  const fields = get('form-fields');
-  btn.innerHTML = '<span>Sending...</span>';
-  fields.classList.add('sending');
-
-  const params = {
-    from_name: `${firstName} ${lastName}`,
-    from_email: email, reply_to: email,
-    phone: phone || 'Not provided',
-    event_type: eventType, event_date: date,
-    package: pkg, message: message || 'No message provided',
-  };
-
-  emailjs.send(SITE_CONFIG.emailjs_service_id, SITE_CONFIG.emailjs_template_id, params)
-    .then(() => {
-      fields.classList.remove('sending');
-      get('form-success').classList.add('show');
-      fields.style.display = 'none';
-    })
-    .catch(err => {
-      console.error('EmailJS error:', err);
-      fields.classList.remove('sending');
-      btn.innerHTML = '<span>Send Inquiry ✦</span>';
-      errEl.textContent = 'Something went wrong. Please try again or email us at bookings@allaroundchitown.com.';
-      errEl.classList.add('show');
-    });
-}
 
 // Inject Stripe links from config
 document.querySelectorAll('[href="STRIPE_LINK_2HR"]').forEach(el => { el.href = SITE_CONFIG.stripe_2hr; });
@@ -1590,28 +1542,7 @@ function calExitAdmin() {
   calRenderMonth();
 }
 
-async function calInit() {
-  try {
-    if (!firebase.apps.length) firebase.initializeApp(SITE_CONFIG.firebase);
-    calDb = firebase.firestore();
-  } catch(e) {
-    console.warn('Firebase not configured — calendar in preview mode.');
-    calDb = null;
-  }
-  calRenderMonth();
-}
 
-async function calLoadBookedDates(year, month) {
-  calBookedDates = new Set();
-  if (!calDb) return;
-  const prefix = `${year}-${String(month + 1).padStart(2, '0')}`;
-  try {
-    const snap = await calDb.collection('booked_dates')
-      .where('date', '>=', prefix + '-01')
-      .where('date', '<=', prefix + '-31').get();
-    snap.forEach(doc => calBookedDates.add(doc.data().date));
-  } catch(e) { console.warn('Calendar read error:', e.message); }
-}
 
 async function calRenderMonth() {
   document.getElementById('cal-loading').style.display = 'flex';
@@ -1655,16 +1586,6 @@ async function calRenderMonth() {
   }
 }
 
-function calSelectDate(iso) {
-  calSelectedISO = iso;
-  const [y, m, d] = iso.split('-');
-  const friendly = `${MONTHS[parseInt(m) - 1]} ${parseInt(d)}, ${y}`;
-  document.getElementById('cal-selected-date-text').textContent = friendly;
-  document.getElementById('cal-selected-banner').classList.add('show');
-  const dateInput = document.getElementById('f-date');
-  if (dateInput) dateInput.value = iso;
-  calRenderMonth();
-}
 
 function scrollToBooking() {
   setTimeout(() => {
@@ -1699,12 +1620,10 @@ function calChangeMonth(dir) {
   calRenderMonth();
 }
 
-calInit();
 
 // ── BACKEND INTEGRATION ───────────────────────────────────
 
 // Override calInit to load from backend API
-const _originalCalInit = calInit;
 async function calInit() {
   try {
     if (!firebase.apps.length) firebase.initializeApp(SITE_CONFIG.firebase);
@@ -1716,7 +1635,6 @@ async function calInit() {
 }
 
 // Override calLoadBookedDates to try backend API first, fall back to Firebase
-const _origLoadBooked = calLoadBookedDates;
 async function calLoadBookedDates(year, month) {
   calBookedDates = new Set();
   try {
@@ -1816,7 +1734,6 @@ async function startCheckout(tier) {
 }
 
 // ── FORM SUBMIT (inquiry without deposit) ─────────────────
-const _origHandleSubmit = handleSubmit;
 async function handleSubmit(e) {
   e.preventDefault();
   const get = id => document.getElementById(id);
@@ -1919,14 +1836,18 @@ document.getElementById('waitlist-modal').addEventListener('click', e => {
 });
 
 // Override calSelectDate to also show waitlist if date is booked
-const _origCalSelect = calSelectDate;
 function calSelectDate(iso) {
-  // If it's booked, show waitlist instead
-  if (calBookedDates.has(iso)) {
-    openWaitlist(iso);
-    return;
-  }
-  _origCalSelect(iso);
+  if (calBookedDates.has(iso)) { openWaitlist(iso); return; }
+  calSelectedISO = iso;
+  const [y, m, d] = iso.split('-');
+  const months = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+  const friendly = `${months[parseInt(m) - 1]} ${parseInt(d)}, ${y}`;
+  document.getElementById('cal-selected-date-text').textContent = friendly;
+  document.getElementById('cal-selected-banner').classList.add('show');
+  const dateInput = document.getElementById('f-date');
+  if (dateInput) dateInput.value = iso;
+  calRenderMonth();
 }
 
 
@@ -2302,4 +2223,35 @@ async function joinWaitlist() {
         <p style="color:var(--gray);line-height:1.8;font-size:.9rem;">Your inquiry has been received. We'll text and email you within a few hours to confirm your date.<br><br>If you haven't paid your deposit yet, do it now to lock in your date before someone else takes it!</p>
         <div style="margin-top:2rem;display:flex;flex-direction:column;gap:.75rem;">
           <a href="#" class="btn-book-next" id="success-stripe-2hr" target="_blank" style="display:block;text-align:center;text-decoration:none;">Pay $100 Deposit — 2hr &#8594;</a>
-          <a href="#" class="btn-book-next" id="success-stripe-4hr" target="_blank" style="display:block;text-align:center;text-decoration:none;background:transparent;border:1px solid rgba(201,168,76,0.3);color:var(--gold);">Pay $10
+          <a href="#" class="btn-book-next" id="success-stripe-4hr" target="_blank" style="display:block;text-align:center;text-decoration:none;background:transparent;border:1px solid rgba(201,168,76,0.3);color:var(--gold);">0 Deposit — 4 Hour →</a>
+        </div>
+      </div>
+
+    </div><!-- end book-modal-body -->
+  </div><!-- end book-modal -->
+</div><!-- end book-modal-overlay -->
+
+<!-- WAITLIST MODAL -->
+<div id="waitlist-modal" style="display:none;position:fixed;inset:0;background:rgba(9,9,9,0.85);z-index:5000;align-items:center;justify-content:center;padding:1.5rem;">
+  <div style="background:var(--dark);border:1px solid rgba(201,168,76,0.2);padding:2.5rem;max-width:420px;width:100%;position:relative;">
+    <button onclick="closeWaitlist()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--gray);font-size:1.2rem;cursor:pointer;">✕</button>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;">This Date Is Taken</div>
+    <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;text-transform:uppercase;margin-bottom:0.75rem;">Join the <span style="color:var(--gold);">Waitlist</span></h3>
+    <p style="font-size:0.85rem;color:var(--gray);line-height:1.7;margin-bottom:1.5rem;">We'll reach out the moment this date opens up.</p>
+    <div id="waitlist-date-display" style="background:rgba(201,168,76,0.08);border-left:3px solid var(--gold);padding:0.75rem 1rem;margin-bottom:1.5rem;font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;color:var(--white);"></div>
+    <div style="display:flex;flex-direction:column;gap:0.75rem;" id="waitlist-form-fields">
+      <div class="form-group"><label>Your Name</label><input type="text" id="wl-name" placeholder="Jane Smith"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="wl-email" placeholder="jane@email.com"></div>
+      <div class="form-group"><label>Phone (for SMS alert)</label><input type="tel" id="wl-phone" placeholder="(312) 555-0123"></div>
+      <button class="form-submit" onclick="submitWaitlist()"><span>Join Waitlist ✦</span></button>
+    </div>
+    <div id="waitlist-success" style="display:none;text-align:center;padding:1rem 0;">
+      <div style="font-size:2rem;margin-bottom:0.75rem;">✦</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;text-transform:uppercase;color:var(--gold);">You're on the list!</div>
+      <div style="font-size:0.85rem;color:var(--gray);margin-top:0.5rem;">We'll reach out the moment this date opens up.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
