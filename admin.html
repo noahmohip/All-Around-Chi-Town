@@ -128,6 +128,7 @@
     .stats-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
 </head>
 <body>
 
@@ -168,6 +169,18 @@
       <div class="nav-item" onclick="showTab('waitlist')">
         <svg viewBox="0 0 16 16" fill="none"><path d="M8 1a4 4 0 1 1 0 8A4 4 0 0 1 8 1z" stroke="currentColor" stroke-width="1.3"/><path d="M1 15c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         Waitlist
+      </div>
+      <div class="nav-item" onclick="showTab('gallery')">
+        <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><circle cx="5.5" cy="6" r="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 11l3.5-3.5 3 3 2.5-2.5 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Gallery
+      </div>
+      <div class="nav-item" onclick="showTab('media')">
+        <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 7l4-3 3 3 2-2 5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5" cy="6" r="1" fill="currentColor"/></svg>
+        Media
+      </div>
+      <div class="nav-item" onclick="showTab('gallery')">
+        <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 10l4-3 3 3 2-2 5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5" cy="6.5" r="1.5" stroke="currentColor" stroke-width="1.2"/></svg>
+        Gallery
       </div>
     </nav>
     <div class="sidebar-bottom">
@@ -239,6 +252,38 @@
       </div>
     </div>
 
+    <!-- GALLERY TAB -->
+    <div id="tab-gallery" class="tab">
+      <div class="page-header">
+        <div class="page-title">Gallery <em>Manager</em></div>
+        <div class="page-sub">Upload photos and videos that appear on the public gallery page</div>
+      </div>
+
+      <!-- Upload zone -->
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()"
+           ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+        <input type="file" id="file-input" multiple accept="image/*,video/mp4,video/quicktime,video/webm"
+               onchange="handleFileSelect(event)">
+        <div class="upload-zone-icon">📸</div>
+        <h3>Drop photos &amp; videos here</h3>
+        <p>Or click to select files &nbsp;·&nbsp; JPG, PNG, MP4, MOV supported &nbsp;·&nbsp; Max 50MB each</p>
+      </div>
+
+      <!-- Upload progress list -->
+      <div id="upload-list"></div>
+
+      <!-- Current gallery -->
+      <div class="table-wrap" style="margin-top:1.5rem;">
+        <div class="table-header">
+          <span class="table-title">Gallery Items</span>
+          <button class="btn-sm" onclick="loadGalleryItems()">&#8635; Refresh</button>
+        </div>
+        <div class="gallery-admin-grid" id="gallery-admin-grid">
+          <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--gray);font-size:0.85rem;">Loading gallery...</div>
+        </div>
+      </div>
+    </div>
+
     <!-- WAITLIST TAB -->
     <div id="tab-waitlist" class="tab">
       <div class="page-header">
@@ -254,12 +299,117 @@
       </div>
     </div>
 
+    <!-- GALLERY TAB -->
+    <div id="tab-gallery" class="tab">
+      <div class="page-header">
+        <div class="page-title"><em>Gallery</em> Manager</div>
+        <div class="page-sub">Upload and manage photos displayed on gallery.html</div>
+      </div>
+
+      <!-- Upload zone -->
+      <div id="upload-zone" style="border:2px dashed rgba(201,168,76,0.25);padding:3rem;text-align:center;margin-bottom:2rem;cursor:pointer;transition:border-color 0.25s;background:var(--dark);position:relative;"
+           ondrop="handleDrop(event)" ondragover="event.preventDefault();this.style.borderColor='var(--gold)'" ondragleave="this.style.borderColor=''" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" multiple accept="image/*" style="display:none" onchange="handleFileSelect(event)">
+        <div style="font-size:2rem;margin-bottom:0.75rem;opacity:0.4;">📷</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--white);margin-bottom:0.4rem;">Drop photos here or click to browse</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gray);">JPG, PNG, WEBP · Max 10MB each</div>
+      </div>
+
+      <!-- Upload progress -->
+      <div id="upload-progress-wrap" style="display:none;margin-bottom:2rem;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;" id="upload-status">Uploading...</div>
+        <div style="background:var(--dark2);height:4px;width:100%;">
+          <div id="upload-bar" style="background:var(--gold);height:4px;width:0%;transition:width 0.3s;"></div>
+        </div>
+      </div>
+
+      <!-- Existing photos -->
+      <div class="table-wrap" style="margin-bottom:1rem;">
+        <div class="table-header">
+          <span class="table-title">Uploaded Photos</span>
+          <button class="btn-sm" onclick="loadGalleryPhotos()">↻ Refresh</button>
+        </div>
+      </div>
+      <div id="admin-photos-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:3px;">
+        <div class="loading"><span class="spinner"></span>Loading photos...</div>
+      </div>
+    </div>
+
+
+    <!-- MEDIA TAB -->
+    <div id="tab-media" class="tab">
+      <div class="page-header">
+        <div class="page-title">Gallery <em>Media</em></div>
+        <div class="page-sub">Upload photos and videos to display on gallery.html</div>
+      </div>
+
+      <!-- Firebase Storage note -->
+      <div style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.15);padding:1rem 1.5rem;margin-bottom:2rem;font-size:0.82rem;color:var(--gray);line-height:1.7;">
+        <strong style="color:var(--gold);">Storage:</strong> Files are uploaded to Firebase Storage and linked in Firestore.
+        Make sure Firebase Storage is enabled in your Firebase console and rules allow admin writes.
+      </div>
+
+      <!-- Upload zone -->
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()"
+           ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+        <div class="upload-zone-icon">📸</div>
+        <h4>Drop photos or videos here</h4>
+        <p>or click to browse — JPG, PNG, MP4, MOV supported</p>
+        <input type="file" id="file-input" multiple accept="image/*,video/*" onchange="handleFiles(this.files)">
+      </div>
+
+      <!-- Category tag selector -->
+      <div style="display:flex;gap:0.75rem;margin-top:1.25rem;flex-wrap:wrap;align-items:center;">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gray);">Tag as:</span>
+        <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;">
+          <input type="radio" name="upload-cat" value="birthday" checked style="accent-color:var(--gold);">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--white);">Birthday</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;">
+          <input type="radio" name="upload-cat" value="wedding" style="accent-color:var(--gold);">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--white);">Wedding</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;">
+          <input type="radio" name="upload-cat" value="corporate" style="accent-color:var(--gold);">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--white);">Corporate</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;">
+          <input type="radio" name="upload-cat" value="other" style="accent-color:var(--gold);">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--white);">Other</span>
+        </label>
+      </div>
+
+      <div class="media-upload-progress" id="upload-progress"><div class="media-upload-progress-bar" id="upload-bar"></div></div>
+      <div class="upload-status" id="upload-status"></div>
+
+      <!-- Media library -->
+      <div style="margin-top:2rem;">
+        <div class="table-header" style="margin-bottom:0;">
+          <span class="table-title">Media Library</span>
+          <button class="btn-sm" onclick="loadMediaLibrary()">↻ Refresh</button>
+        </div>
+        <div class="media-grid" id="media-grid">
+          <div style="text-align:center;padding:2rem;color:var(--gray);font-size:0.82rem;grid-column:1/-1;">
+            Loading media...
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
 <script>
 // ── CONFIG ────────────────────────────────────────────────
 const API = 'https://your-backend.railway.app'; // ← Change this after deploying backend
+
+// Firebase config for Storage (same values as SETUP.md)
+const FIREBASE_CONFIG = {
+  apiKey:        'REPLACE_FIREBASE_API_KEY',
+  authDomain:    'REPLACE.firebaseapp.com',
+  projectId:     'REPLACE_FIREBASE_PROJECT_ID',
+  storageBucket: 'REPLACE.appspot.com',
+};
 let adminToken = localStorage.getItem('aact_admin_token') || null;
 let dashData   = null;
 
@@ -533,10 +683,246 @@ async function notifyWaitlist(id, name, email, phone, date) {
   } catch(e) { alert('Error: ' + e.message); }
 }
 
-// ── UTILS ─────────────────────────────────────────────────
-function copyToClipboard(text) {
-  navigator.clipboard.writeText(text);
+// ── GALLERY MANAGEMENT ─────────────────────────────────────
+let storageRef = null;
+
+async function initStorage() {
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    storageRef = firebase.storage().ref('gallery/');
+  } catch(e) { console.warn('Storage init error:', e.message); }
+}
+
+async function loadGalleryPhotos() {
+  const grid = document.getElementById('admin-photos-grid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="loading"><span class="spinner"></span>Loading...</div>';
+
+  try {
+    if (!storageRef) await initStorage();
+    if (!storageRef) throw new Error('Firebase Storage not configured');
+    const result = await storageRef.listAll();
+    if (!result.items.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;padding:2rem;text-align:center;color:var(--gray);font-family:\'Barlow Condensed\',sans-serif;font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;">No photos uploaded yet</div>';
+      return;
+    }
+    grid.innerHTML = '';
+    const items = await Promise.all(result.items.map(async item => {
+      const url = await item.getDownloadURL();
+      return { url, name: item.name, ref: item };
+    }));
+    items.forEach(({ url, name, ref }) => {
+      const div = document.createElement('div');
+      div.style.cssText = 'position:relative;aspect-ratio:1;overflow:hidden;background:var(--dark2);';
+      div.innerHTML = `
+        <img src="${url}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy">
+        <div style="position:absolute;inset:0;background:rgba(9,9,9,0);display:flex;align-items:center;justify-content:center;transition:background 0.25s;" onmouseenter="this.style.background='rgba(9,9,9,0.6)';this.querySelector('button').style.opacity='1'" onmouseleave="this.style.background='rgba(9,9,9,0)';this.querySelector('button').style.opacity='0'">
+          <button onclick="deletePhoto('${name}', this)" style="opacity:0;background:rgba(244,67,54,0.2);border:1px solid rgba(244,67,54,0.4);color:#f97070;font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.4rem 0.8rem;cursor:pointer;transition:opacity 0.25s;">🗑 Delete</button>
+        </div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:0.4rem 0.5rem;background:rgba(9,9,9,0.7);font-family:'Barlow Condensed',sans-serif;font-size:0.55rem;letter-spacing:0.1em;color:var(--gray);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${name}</div>`;
+      grid.appendChild(div);
+    });
+  } catch(e) {
+    grid.innerHTML = `<div style="grid-column:1/-1;padding:2rem;text-align:center;color:var(--red);font-size:0.85rem;">${e.message}</div>`;
+  }
+}
+
+async function deletePhoto(name, btn) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  try {
+    if (!storageRef) await initStorage();
+    await storageRef.child(name).delete();
+    btn.closest('div[style*="aspect-ratio"]').remove();
+  } catch(e) { alert('Delete failed: ' + e.message); }
+}
+
+async function handleFiles(files) {
+  if (!files.length) return;
+  const progressWrap = document.getElementById('upload-progress-wrap');
+  const bar          = document.getElementById('upload-bar');
+  const status       = document.getElementById('upload-status');
+  progressWrap.style.display = 'block';
+
+  try {
+    if (!storageRef) await initStorage();
+    if (!storageRef) throw new Error('Firebase Storage not configured — add storageBucket to SITE_CONFIG');
+
+    let completed = 0;
+    await Promise.all(Array.from(files).map(file => {
+      return new Promise((resolve, reject) => {
+        if (file.size > 10 * 1024 * 1024) { resolve(); return; } // skip >10MB
+        const ext      = file.name.split('.').pop();
+        const filename = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+        const task     = storageRef.child(filename).put(file);
+        task.on('state_changed',
+          snap => {
+            const pct = Math.round((completed / files.length) * 100 + (snap.bytesTransferred / snap.totalBytes) * (100 / files.length));
+            bar.style.width = pct + '%';
+            status.textContent = `Uploading ${completed + 1} of ${files.length}...`;
+          },
+          reject,
+          () => { completed++; bar.style.width = Math.round((completed / files.length) * 100) + '%'; resolve(); }
+        );
+      });
+    }));
+
+    status.textContent = `✓ ${files.length} photo${files.length > 1 ? 's' : ''} uploaded successfully!`;
+    bar.style.background = 'var(--green)';
+    setTimeout(() => { progressWrap.style.display = 'none'; bar.style.background = 'var(--gold)'; bar.style.width = '0%'; }, 3000);
+    await loadGalleryPhotos();
+
+  } catch(e) {
+    status.textContent = 'Upload failed: ' + e.message;
+    bar.style.background = 'var(--red)';
+  }
+}
+
+function handleFileSelect(e) { handleFiles(e.target.files); e.target.value = ''; }
+function handleDrop(e) { e.preventDefault(); document.getElementById('upload-zone').style.borderColor = ''; handleFiles(e.dataTransfer.files); }
+
+// Load gallery when tab is shown
+const _origShowTab = showTab;
+function showTab(name) {
+  if (name === 'gallery') loadGalleryPhotos();
+  _origShowTab.call(this, ...arguments);
+}
+
+// Init storage on load
+initStorage();
+
+// ── UTILS ──────────────────────────────────────────────────
+function copyToClipboard(text) { navigator.clipboard.writeText(text); }
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
+<script>
+// ── MEDIA UPLOAD ────────────────────────────────────────
+let fbStorage = null;
+let fbDb2 = null;
+
+function getStorageAndDb() {
+  if (!fbStorage) {
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey:     'REPLACE_FIREBASE_API_KEY',
+        authDomain: 'REPLACE.firebaseapp.com',
+        projectId:  'REPLACE_FIREBASE_PROJECT_ID',
+        storageBucket: 'REPLACE.appspot.com',
+      });
+    }
+    fbStorage = firebase.storage();
+    fbDb2     = firebase.firestore();
+  }
+  return { storage: fbStorage, db: fbDb2 };
+}
+
+function handleDragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('drag-over'); }
+function handleDragLeave(e) { document.getElementById('upload-zone').classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  handleFiles(e.dataTransfer.files);
+}
+
+async function handleFiles(files) {
+  if (!files || !files.length) return;
+  const category = document.querySelector('input[name="upload-cat"]:checked')?.value || 'other';
+  const statusEl = document.getElementById('upload-status');
+  const progWrap = document.getElementById('upload-progress');
+  const progBar  = document.getElementById('upload-bar');
+
+  const { storage, db } = getStorageAndDb();
+  progWrap.style.display = 'block';
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const isVideo = file.type.startsWith('video/');
+    const fileType = isVideo ? 'video' : 'photo';
+    const path = `gallery/${fileType}/${Date.now()}_${file.name}`;
+    statusEl.textContent = `Uploading ${i + 1} of ${files.length}: ${file.name}`;
+
+    try {
+      const ref = storage.ref(path);
+      const task = ref.put(file);
+      await new Promise((resolve, reject) => {
+        task.on('state_changed',
+          snap => { progBar.style.width = (snap.bytesTransferred / snap.totalBytes * 100) + '%'; },
+          reject,
+          resolve
+        );
+      });
+      const url = await ref.getDownloadURL();
+      // Save to Firestore
+      await db.collection('gallery_media').add({
+        url, path, category, type: fileType,
+        name: file.name, uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    } catch (err) {
+      statusEl.textContent = `Error uploading ${file.name}: ${err.message}`;
+      console.error(err);
+    }
+  }
+
+  progBar.style.width = '100%';
+  statusEl.textContent = `✓ ${files.length} file(s) uploaded successfully`;
+  setTimeout(() => { progWrap.style.display = 'none'; progBar.style.width = '0%'; }, 2000);
+  loadMediaLibrary();
+}
+
+async function loadMediaLibrary() {
+  const grid = document.getElementById('media-grid');
+  grid.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--gray);font-size:0.82rem;grid-column:1/-1;">Loading...</div>';
+  try {
+    const { db } = getStorageAndDb();
+    const snap = await db.collection('gallery_media').orderBy('uploadedAt', 'desc').limit(60).get();
+    if (snap.empty) {
+      grid.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--gray);font-size:0.82rem;grid-column:1/-1;">No media uploaded yet.</div>';
+      return;
+    }
+    grid.innerHTML = '';
+    snap.forEach(doc => {
+      const m = doc.data();
+      const div = document.createElement('div');
+      div.className = 'media-thumb';
+      div.innerHTML = m.type === 'video'
+        ? `<video src="${m.url}" muted loop onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>`
+        : `<img src="${m.url}" alt="${m.name}" loading="lazy">`;
+      div.innerHTML += `
+        <div class="media-thumb-overlay">
+          <span class="media-thumb-tag">${m.category}</span>
+          <div class="media-thumb-actions">
+            <button class="btn-sm danger" onclick="deleteMedia('${doc.id}','${m.path}',this)" title="Delete">✕</button>
+          </div>
+        </div>`;
+      grid.appendChild(div);
+    });
+  } catch(e) {
+    grid.innerHTML = `<div style="text-align:center;padding:2rem;color:#f97070;font-size:0.82rem;grid-column:1/-1;">Error: ${e.message}</div>`;
+  }
+}
+
+async function deleteMedia(docId, storagePath, btn) {
+  if (!confirm('Delete this file permanently?')) return;
+  btn.disabled = true;
+  try {
+    const { storage, db } = getStorageAndDb();
+    await storage.ref(storagePath).delete().catch(() => {});
+    await db.collection('gallery_media').doc(docId).delete();
+    btn.closest('.media-thumb').remove();
+  } catch(e) {
+    alert('Error deleting: ' + e.message);
+    btn.disabled = false;
+  }
+}
+
+// Load media when tab is shown
+const _origShowTab = showTab;
+function showTab(name) {
+  _origShowTab(name);
+  if (name === 'media') loadMediaLibrary();
 }
 </script>
+
 </body>
 </html>
