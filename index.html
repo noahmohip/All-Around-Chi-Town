@@ -158,6 +158,8 @@
   .package-features { list-style: none; display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 2.5rem; align-items: center; }
   .package-features li { display: flex; align-items: center; gap: 0.8rem; font-size: 0.88rem; color: var(--gray); }
   .package-features li::before { content: ''; width: 16px; height: 1px; background: var(--gold); flex-shrink: 0; }
+  .package-features li.highlight { color: var(--gold-light); font-weight: 500; }
+  .package-features li.highlight::before { background: var(--gold-light); }
   .package-card .btn-primary, .package-card .btn-outline { width: 100%; text-align: center; display: block; }
 
   /* GALLERY */
@@ -295,6 +297,100 @@
   .testimonials-cta { margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; position: relative; z-index: 1; }
   .testimonials-cta p { font-size: 0.85rem; color: var(--gray); }
 
+  /* ADD-ONS */
+  #addons { background: var(--black); text-align: center; }
+  .addons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; margin-top: 4rem; max-width: 1100px; margin-left: auto; margin-right: auto; background: rgba(201,168,76,0.1); }
+  .addon-card { background: var(--dark); padding: 2.5rem 2rem; position: relative; overflow: hidden; transition: background 0.3s; text-align: center; }
+  .addon-card:hover { background: var(--dark2); }
+  .addon-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); transform: scaleX(0); transform-origin: center; transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); }
+  .addon-card:hover::after { transform: scaleX(1); }
+  .addon-price-tag { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--black); background: var(--gold); padding: 0.25rem 0.8rem; margin-bottom: 1.5rem; font-weight: 700; }
+  .addon-icon { width: 56px; height: 56px; margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: center; }
+  .addon-icon svg { width: 100%; height: 100%; }
+  .addon-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+  .addon-desc { font-size: 0.85rem; color: var(--gray); line-height: 1.7; max-width: 200px; margin: 0 auto 1.25rem; }
+  .addon-cost { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); }
+  .addon-cost span { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em; color: var(--gray); font-weight: 400; display: block; margin-top: 0.1rem; }
+  .addons-note { max-width: 600px; margin: 2.5rem auto 0; font-size: 0.85rem; color: var(--gray); line-height: 1.7; }
+  .addons-note strong { color: var(--white); }
+
+  /* FAQ */
+  #faq { background: var(--dark); text-align: center; }
+  .faq-list { max-width: 760px; margin: 3.5rem auto 0; text-align: left; }
+  .faq-item { border-bottom: 1px solid rgba(201,168,76,0.1); overflow: hidden; }
+  .faq-item:first-child { border-top: 1px solid rgba(201,168,76,0.1); }
+  .faq-q { width: 100%; background: none; border: none; color: var(--white); font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; text-align: left; padding: 1.4rem 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; transition: color 0.25s; }
+  .faq-q:hover { color: var(--gold); }
+  .faq-icon { width: 22px; height: 22px; border: 1px solid rgba(201,168,76,0.3); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.25s, border-color 0.25s, transform 0.35s; }
+  .faq-icon svg { width: 10px; height: 10px; transition: transform 0.35s; }
+  .faq-item.open .faq-icon { background: var(--gold); border-color: var(--gold); transform: rotate(0deg); }
+  .faq-item.open .faq-icon svg { transform: rotate(45deg); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.22,1,0.36,1), padding 0.3s; }
+  .faq-item.open .faq-a { max-height: 300px; }
+  .faq-a p { padding: 0 0 1.4rem; font-size: 0.92rem; color: var(--gray); line-height: 1.8; }
+  .faq-a strong { color: var(--white); }
+  .faq-cta { margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+  .faq-cta p { font-size: 0.88rem; color: var(--gray); }
+
+
+  /* ── AVAILABILITY CALENDAR ─────────────────────── */
+  #availability { background: var(--black); text-align: center; padding: 7rem 4rem; }
+  .cal-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--gray); margin: 1rem auto 3rem; max-width: 420px; }
+  .cal-container { max-width: 580px; margin: 0 auto; background: var(--dark); border: 1px solid rgba(201,168,76,0.12); padding: 2rem; position: relative; }
+  .cal-nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+  .cal-arrow { background: none; border: 1px solid rgba(201,168,76,0.2); color: var(--gold); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: background 0.25s, border-color 0.25s; }
+  .cal-arrow:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+  .cal-month-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); }
+  .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 0.5rem; }
+  .cal-weekdays span { font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); text-align: center; padding: 0.4rem 0; }
+  .cal-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; font-weight: 500; border: 1px solid transparent; transition: all 0.2s; position: relative; }
+  .cal-day.empty { background: transparent; }
+  .cal-day.past { color: rgba(122,117,112,0.35); background: transparent; cursor: not-allowed; }
+  .cal-day.today { border-color: rgba(201,168,76,0.3); color: var(--gold); }
+  .cal-day.available { background: var(--dark2); color: var(--white); cursor: pointer; }
+  .cal-day.available:hover { background: rgba(201,168,76,0.15); border-color: rgba(201,168,76,0.4); color: var(--gold); }
+  .cal-day.booked { background: rgba(180,40,40,0.12); color: rgba(200,80,80,0.55); cursor: not-allowed; text-decoration: line-through; }
+  .cal-day.selected { background: var(--gold) !important; color: var(--black) !important; border-color: var(--gold) !important; font-weight: 900; }
+  .cal-day.booked::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(180,40,40,0.08) 4px, rgba(180,40,40,0.08) 5px); }
+  .cal-loading { position: absolute; inset: 0; background: rgba(17,16,16,0.7); display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+  .cal-legend { display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(201,168,76,0.08); flex-wrap: wrap; }
+  .cal-legend-item { display: flex; align-items: center; gap: 0.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); }
+  .cal-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .cal-dot-avail { background: var(--dark2); border: 1px solid rgba(201,168,76,0.3); }
+  .cal-dot-booked { background: rgba(180,40,40,0.4); }
+  .cal-dot-selected { background: var(--gold); }
+  .cal-selected-banner { max-width: 580px; margin: 1.5rem auto 0; background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.25); padding: 1.25rem 1.75rem; display: none; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .cal-selected-banner.show { display: flex; }
+  .cal-selected-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 0.2rem; }
+  .cal-selected-date-text { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--white); letter-spacing: 0.05em; }
+  .cal-admin-bar { max-width: 580px; margin: 1rem auto 0; background: rgba(255,80,80,0.08); border: 1px solid rgba(255,80,80,0.25); padding: 0.75rem 1.25rem; display: none; align-items: center; justify-content: space-between; }
+  .cal-admin-bar.show { display: flex; }
+  .cal-admin-bar span { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,120,120,0.8); }
+  .cal-admin-bar button { font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; background: rgba(255,80,80,0.15); border: 1px solid rgba(255,80,80,0.3); color: rgba(255,120,120,0.8); padding: 0.3rem 0.8rem; cursor: pointer; }
+
+  /* ── DEPOSIT SECTION ───────────────────────────── */
+  .deposit-wrap { margin-top: 2rem; border-top: 1px solid rgba(201,168,76,0.1); padding-top: 2rem; }
+  .deposit-wrap h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+  .deposit-wrap p { font-size: 0.82rem; color: var(--gray); line-height: 1.65; margin-bottom: 1.25rem; }
+  .deposit-btns { display: flex; flex-direction: column; gap: 0.75rem; }
+  .deposit-btn { display: flex; align-items: center; justify-content: space-between; background: var(--dark2); border: 1px solid rgba(201,168,76,0.15); padding: 0.9rem 1.25rem; text-decoration: none; transition: border-color 0.25s, background 0.25s; }
+  .deposit-btn:hover { border-color: rgba(201,168,76,0.4); background: var(--dark3); }
+  .deposit-btn-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); }
+  .deposit-btn-price { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--gold); }
+  .deposit-btn-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); display: block; margin-top: 0.1rem; }
+
+  /* ── FORM FEEDBACK ─────────────────────────────── */
+  .form-success { display: none; text-align: center; padding: 3rem 2rem; }
+  .form-success.show { display: block; }
+  .form-success-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .form-success h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 900; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+  .form-success p { font-size: 0.9rem; color: var(--gray); line-height: 1.7; }
+  .form-fields { transition: opacity 0.3s; }
+  .form-fields.sending { opacity: 0.5; pointer-events: none; }
+  .form-error-msg { font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: #ff6b6b; margin-top: 0.75rem; display: none; }
+  .form-error-msg.show { display: block; }
+
   /* MOBILE */
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
@@ -318,6 +414,7 @@
     .gallery-vid-item { height: 260px; }
     .gallery-tiles { grid-template-columns: 1fr 1fr; }
     .events-grid { grid-template-columns: 1fr; }
+    .addons-grid { grid-template-columns: 1fr; }
     .review-card { width: 280px; }
     .gallery-item:first-child { grid-column: span 2; height: 280px; }
     .gallery-item { height: 180px; }
@@ -327,6 +424,12 @@
     .scroll-hint { display: none; }
   }
 </style>
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
 </head>
 <body>
 
@@ -339,8 +442,11 @@
     <li><a href="#how">How It Works</a></li>
     <li><a href="#events">Events</a></li>
     <li><a href="#packages">Packages</a></li>
+    <li><a href="#addons">Add-Ons</a></li>
+    <li><a href="#availability">Availability</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#about">About</a></li>
+    <li><a href="#faq">FAQ</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#contact" class="nav-book">Book Now</a></li>
   </ul>
@@ -589,6 +695,8 @@
         <li>Digital Backup</li>
         <li>Free Delivery</li>
         <li>Instant Digital Share</li>
+        <li class="highlight">✦ Prop Package Included</li>
+        <li class="highlight">✦ Custom Overlay Included</li>
       </ul>
       <a href="#contact" class="btn-outline">Book This Package</a>
     </div>
@@ -602,6 +710,9 @@
         <li>Digital Backup</li>
         <li>Free Delivery</li>
         <li>Instant Digital Share</li>
+        <li class="highlight">✦ Prop Package Included</li>
+        <li class="highlight">✦ Custom Overlay Included</li>
+        <li class="highlight">✦ LED Lighting Upgrade</li>
       </ul>
       <a href="#contact" class="btn-primary"><span>Book This Package</span></a>
     </div>
@@ -613,12 +724,44 @@
         <li>Corporate Events</li>
         <li>Brand Activations</li>
         <li>Large Celebrations</li>
-        <li>Custom Overlays</li>
+        <li class="highlight">✦ Prop Package Included</li>
+        <li class="highlight">✦ Custom Overlay Included</li>
         <li>Flexible Duration</li>
       </ul>
       <a href="#contact" class="btn-outline">Get a Quote</a>
     </div>
   </div>
+</section>
+
+<!-- ADD-ONS -->
+<section id="addons">
+  <div class="section-tag reveal">Level Up</div>
+  <h2 class="section-h2 reveal reveal-delay-1">Make It <em>Unforgettable</em></h2>
+
+  <div class="addons-grid" style="grid-template-columns: 1fr 1fr; max-width: 740px;">
+
+    <div class="addon-card reveal reveal-delay-1">
+      <div class="addon-price-tag">Add-On</div>
+      <div class="addon-icon">
+        <svg viewBox="0 0 56 56" fill="none"><rect x="10" y="32" width="26" height="14" rx="2" stroke="#c9a84c" stroke-width="1.5"/><rect x="36" y="36" width="10" height="6" rx="1" stroke="#c9a84c" stroke-width="1.4"/><path d="M14 32c0-4 3-6 6-5 1-3 4-5 7-4 2-2 5-2 6 1 3 0 5 2 5 5" stroke="#c9a84c" stroke-width="1.4" stroke-linecap="round"/><path d="M8 24c1-3 4-4 6-2 1-2 3-3 5-2" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/></svg>
+      </div>
+      <div class="addon-title">Fog / Smoke Effect</div>
+      <p class="addon-desc">Low-lying fog around the platform for a cinematic, dreamy effect that makes every slow-mo clip look incredible.</p>
+      <div class="addon-cost">+$75<span>per event</span></div>
+    </div>
+
+    <div class="addon-card reveal reveal-delay-2">
+      <div class="addon-price-tag">Add-On</div>
+      <div class="addon-icon">
+        <svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="18" stroke="#c9a84c" stroke-width="1.5"/><path d="M28 14v14l8 5" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="42" cy="14" r="8" fill="#111010" stroke="#c9a84c" stroke-width="1.3"/><path d="M42 10v8M38 14h8" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="addon-title">Extra Hour</div>
+      <p class="addon-desc">Need more time? Add an extra hour to any package and keep the party going all night long.</p>
+      <div class="addon-cost">+$125<span>per hour</span></div>
+    </div>
+
+  </div>
+  <p class="addons-note reveal">All add-ons can be included when you <strong>book through the contact form below</strong>. Just mention what you'd like and we'll build a custom quote for your event.</p>
 </section>
 
 <!-- GALLERY -->
@@ -804,6 +947,139 @@
   <div class="gallery-upload-note">✦ More photos &amp; videos being added soon — <em>follow us on social media for the latest!</em></div>
 </section>
 
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-tag reveal">Kind Words</div>
+  <h2 class="section-h2 reveal reveal-delay-1">What Our <em>Clients Say</em></h2>
+
+  <div class="reviews-track-wrap">
+    <div class="reviews-track">
+
+      <!-- Review 1 -->
+      <div class="review-card">
+        <div class="review-stars">
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+        </div>
+        <div class="review-quote">"</div>
+        <p class="review-text">Everyone at the party could not stop talking about the 360 booth. The slow motion videos were absolutely incredible — my daughter's quinceañera was perfect.</p>
+        <div class="review-author">Maria G.</div>
+        <div class="review-event">Quinceañera · Chicago, IL</div>
+      </div>
+
+      <!-- Review 2 -->
+      <div class="review-card">
+        <div class="review-stars">
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+        </div>
+        <div class="review-quote">"</div>
+        <p class="review-text">Booked All Around Chi-Town for our company holiday party and it was a huge hit. The attendant was professional and the videos were sent instantly. 10/10.</p>
+        <div class="review-author">James T.</div>
+        <div class="review-event">Corporate Party · Downtown Chicago</div>
+      </div>
+
+      <!-- Review 3 -->
+      <div class="review-card">
+        <div class="review-stars">
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+        </div>
+        <div class="review-quote">"</div>
+        <p class="review-text">My sweet 16 was everything I dreamed of. The 360 booth had a line the entire night! The videos came out so clear and the attendant was super fun.</p>
+        <div class="review-author">Aaliyah R.</div>
+        <div class="review-event">Sweet 16 · Oak Park, IL</div>
+      </div>
+
+      <!-- Review 4 -->
+      <div class="review-card">
+        <div class="review-stars">
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+        </div>
+        <div class="review-quote">"</div>
+        <p class="review-text">Best decision we made for our wedding reception. Guests are still sending us their clips weeks later. Free delivery was a huge bonus — highly recommend!</p>
+        <div class="review-author">DeShawn &amp; Keisha W.</div>
+        <div class="review-event">Wedding Reception · Naperville, IL</div>
+      </div>
+
+      <!-- Review 5 -->
+      <div class="review-card">
+        <div class="review-stars">
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+        </div>
+        <div class="review-quote">"</div>
+        <p class="review-text">The setup was quick and the team was incredibly professional. Every single person at the graduation party got on that platform — it was the highlight of the night.</p>
+        <div class="review-author">Patricia M.</div>
+        <div class="review-event">Graduation Party · Evanston, IL</div>
+      </div>
+
+      <!-- Review 6 -->
+      <div class="review-card">
+        <div class="review-stars">
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+          <svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg>
+        </div>
+        <div class="review-quote">"</div>
+        <p class="review-text">All Around Chi-Town exceeded every expectation. The slow-motion videos are absolutely stunning and my guests haven't stopped posting them. Will book again!</p>
+        <div class="review-author">Tanya L.</div>
+        <div class="review-event">Birthday Party · Chicago, IL</div>
+      </div>
+
+      <!-- Duplicate set for seamless loop -->
+      <div class="review-card">
+        <div class="review-stars"><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg></div>
+        <div class="review-quote">"</div>
+        <p class="review-text">Everyone at the party could not stop talking about the 360 booth. The slow motion videos were absolutely incredible — my daughter's quinceañera was perfect.</p>
+        <div class="review-author">Maria G.</div><div class="review-event">Quinceañera · Chicago, IL</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg></div>
+        <div class="review-quote">"</div>
+        <p class="review-text">Booked All Around Chi-Town for our company holiday party and it was a huge hit. The attendant was professional and the videos were sent instantly. 10/10.</p>
+        <div class="review-author">James T.</div><div class="review-event">Corporate Party · Downtown Chicago</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg></div>
+        <div class="review-quote">"</div>
+        <p class="review-text">Best decision we made for our wedding reception. Guests are still sending us their clips weeks later. Free delivery was a huge bonus — highly recommend!</p>
+        <div class="review-author">DeShawn &amp; Keisha W.</div><div class="review-event">Wedding Reception · Naperville, IL</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg><svg viewBox="0 0 14 14" fill="#c9a84c"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5z"/></svg></div>
+        <div class="review-quote">"</div>
+        <p class="review-text">All Around Chi-Town exceeded every expectation. The slow-motion videos are absolutely stunning and my guests haven't stopped posting them. Will book again!</p>
+        <div class="review-author">Tanya L.</div><div class="review-event">Birthday Party · Chicago, IL</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="testimonials-cta">
+    <p>Have an experience to share? We'd love to hear from you.</p>
+    <a href="#contact" class="btn-outline">Leave a Review</a>
+  </div>
+</section>
+
 <!-- ABOUT -->
 <section id="about-section">
   <div id="about">
@@ -834,6 +1110,124 @@
         <div class="stat-box"><span class="stat-num">$0</span><span class="stat-label">Delivery Fee</span></div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-tag reveal">Got Questions?</div>
+  <h2 class="section-h2 reveal reveal-delay-1">Frequently <em>Asked</em></h2>
+
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How much space does the booth require?
+        <span class="faq-icon"><svg viewBox="0 0 10 10" fill="none"><line x1="5" y1="1" x2="5" y2="9" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="5" x2="9" y2="5" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="faq-a"><p>The booth platform is approximately <strong>6ft in diameter</strong> and the arm extends about 6ft horizontally. We recommend a minimum 10x10ft open area for the best experience and to give guests room to move around.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How far in advance should I book?
+        <span class="faq-icon"><svg viewBox="0 0 10 10" fill="none"><line x1="5" y1="1" x2="5" y2="9" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="5" x2="9" y2="5" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="faq-a"><p>We recommend booking <strong>at least 2–3 weeks in advance</strong>, especially for weekends and holiday events. Popular dates fill up fast — use the contact form below to check availability for your date.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How do guests receive their videos?
+        <span class="faq-icon"><svg viewBox="0 0 10 10" fill="none"><line x1="5" y1="1" x2="5" y2="9" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="5" x2="9" y2="5" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="faq-a"><p>Videos are sent <strong>instantly via text or QR code</strong> the moment they're recorded. Guests can download and share directly to TikTok, Instagram, or anywhere else right from the platform. Every video is also backed up digitally so nothing is ever lost.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Is there an attendant at the event?
+        <span class="faq-icon"><svg viewBox="0 0 10 10" fill="none"><line x1="5" y1="1" x2="5" y2="9" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="5" x2="9" y2="5" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="faq-a"><p><strong>Yes, always.</strong> Every booking includes a dedicated on-site attendant who handles setup, runs the booth, helps guests, and ensures everything runs smoothly from start to finish. You don't have to worry about a thing.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What areas do you serve?
+        <span class="faq-icon"><svg viewBox="0 0 10 10" fill="none"><line x1="5" y1="1" x2="5" y2="9" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="5" x2="9" y2="5" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="faq-a"><p>We serve <strong>Chicago and all surrounding suburbs</strong> including Oak Park, Evanston, Naperville, Schaumburg, Joliet, Aurora, and more — all with <strong>free delivery</strong>. Not sure if we cover your area? Reach out and we'll let you know.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What is your cancellation policy?
+        <span class="faq-icon"><svg viewBox="0 0 10 10" fill="none"><line x1="5" y1="1" x2="5" y2="9" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="5" x2="9" y2="5" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="faq-a"><p>We require a <strong>deposit to hold your date</strong>. Cancellations made more than 7 days before the event receive a full refund of the deposit. Cancellations within 7 days are non-refundable but can be rescheduled within 60 days at no extra charge.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How many people can use the booth at once?
+        <span class="faq-icon"><svg viewBox="0 0 10 10" fill="none"><line x1="5" y1="1" x2="5" y2="9" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="5" x2="9" y2="5" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="faq-a"><p>The platform comfortably fits <strong>1–4 people</strong> per session. Groups work great — the more people, the more energy and the better the video. There is no limit on the number of sessions, so everyone at your event gets a turn.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Can I add a custom overlay with my event name or logo?
+        <span class="faq-icon"><svg viewBox="0 0 10 10" fill="none"><line x1="5" y1="1" x2="5" y2="9" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="5" x2="9" y2="5" stroke="#090909" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="faq-a"><p><strong>Absolutely.</strong> Custom overlays are one of our most popular add-ons. We'll brand every video with your name, event date, logo, or any design you like. Just mention it when you fill out the booking form and we'll take care of the rest.</p></div>
+    </div>
+
+  </div>
+
+  <div class="faq-cta">
+    <p>Still have a question? We're happy to help.</p>
+    <a href="#contact" class="btn-primary"><span>Get In Touch</span></a>
+  </div>
+</section>
+
+<!-- AVAILABILITY CALENDAR -->
+<section id="availability">
+  <div class="section-tag reveal">Book Your Date</div>
+  <h2 class="section-h2 reveal reveal-delay-1">Check <em>Availability</em></h2>
+  <p class="cal-subtitle reveal reveal-delay-2">Click any available date to check it for your event, then fill out the form below.</p>
+
+  <div class="cal-container reveal reveal-delay-3">
+    <div id="cal-loading" class="cal-loading" style="display:none">Loading calendar...</div>
+    <div class="cal-nav-row">
+      <button class="cal-arrow" id="cal-prev" onclick="calChangeMonth(-1)">&#8592;</button>
+      <div class="cal-month-title" id="cal-month-title">Loading...</div>
+      <button class="cal-arrow" id="cal-next" onclick="calChangeMonth(1)">&#8594;</button>
+    </div>
+    <div class="cal-weekdays">
+      <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+    </div>
+    <div class="cal-days" id="cal-days"></div>
+    <div class="cal-legend">
+      <div class="cal-legend-item"><span class="cal-dot cal-dot-avail"></span>Available</div>
+      <div class="cal-legend-item"><span class="cal-dot cal-dot-booked"></span>Booked</div>
+      <div class="cal-legend-item"><span class="cal-dot cal-dot-selected"></span>Selected</div>
+    </div>
+  </div>
+
+  <div class="cal-selected-banner" id="cal-selected-banner">
+    <div>
+      <span class="cal-selected-label">Selected Date</span>
+      <strong class="cal-selected-date-text" id="cal-selected-date-text">—</strong>
+    </div>
+    <a href="#contact" class="btn-primary" onclick="scrollToBooking()"><span>Book This Date &#8594;</span></a>
+  </div>
+
+  <!-- Admin bar — only visible when admin mode is on -->
+  <div class="cal-admin-bar" id="cal-admin-bar">
+    <span>&#9888; Admin Mode — click any date to toggle booked/available</span>
+    <button onclick="calExitAdmin()">Exit Admin</button>
   </div>
 </section>
 
@@ -880,22 +1274,60 @@
       </div>
     </div>
     <div class="reveal reveal-delay-2">
-      <div class="form-row">
-        <div class="form-group"><label>First Name</label><input type="text" placeholder="Jane"></div>
-        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith"></div>
-      </div>
-      <div class="form-group"><label>Email</label><input type="email" placeholder="jane@email.com"></div>
-      <div class="form-group"><label>Event Type</label>
-        <select><option value="">Select an event type...</option><option>Birthday Party</option><option>Wedding / Engagement</option><option>Corporate Event</option><option>Brand Activation</option><option>Sweet 16 / Quinceañera</option><option>Other</option></select>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Event Date</label><input type="date"></div>
-        <div class="form-group"><label>Package</label>
-          <select><option value="">Select a package...</option><option>2 Hour Spin — $300</option><option>4 Hour Spin — $600</option><option>Custom Quote</option></select>
+      <!-- Form fields -->
+      <div class="form-fields" id="form-fields">
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input type="text" id="f-firstname" placeholder="Jane"></div>
+          <div class="form-group"><label>Last Name</label><input type="text" id="f-lastname" placeholder="Smith"></div>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" id="f-email" placeholder="jane@email.com"></div>
+        <div class="form-group"><label>Phone (optional)</label><input type="tel" id="f-phone" placeholder="(312) 555-0123"></div>
+        <div class="form-group"><label>Event Type</label>
+          <select id="f-eventtype"><option value="">Select an event type...</option><option>Birthday Party</option><option>Wedding / Engagement</option><option>Corporate Event</option><option>Brand Activation</option><option>Sweet 16 / Quinceañera</option><option>Graduation</option><option>Other</option></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Event Date</label><input type="date" id="f-date"></div>
+          <div class="form-group"><label>Package</label>
+            <select id="f-package"><option value="">Select a package...</option><option>2 Hour Spin — $300</option><option>4 Hour Spin — $600</option><option>Custom Quote</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label>Message</label><textarea id="f-message" placeholder="Tell us about your event — venue, number of guests, any special requests..."></textarea></div>
+        <button class="form-submit" id="form-submit-btn" onclick="handleSubmit(event)"><span>Send Inquiry ✦</span></button>
+        <div class="form-error-msg" id="form-error-msg">Please fill in all required fields and try again.</div>
+
+        <!-- Stripe Deposit Section -->
+        <div class="deposit-wrap">
+          <h4>✦ Secure Your Date with a Deposit</h4>
+          <p>Lock in your date instantly by paying a $100 refundable deposit via Stripe. The balance is due on the day of the event.</p>
+          <div class="deposit-btns">
+            <a href="STRIPE_LINK_2HR" target="_blank" class="deposit-btn" id="deposit-2hr">
+              <div>
+                <div class="deposit-btn-label">2 Hour Spin</div>
+                <span class="deposit-btn-sub">$100 deposit · $200 balance due day-of</span>
+              </div>
+              <div class="deposit-btn-price">$100 →</div>
+            </a>
+            <a href="STRIPE_LINK_4HR" target="_blank" class="deposit-btn" id="deposit-4hr">
+              <div>
+                <div class="deposit-btn-label">4 Hour Premium Spin</div>
+                <span class="deposit-btn-sub">$100 deposit · $500 balance due day-of</span>
+              </div>
+              <div class="deposit-btn-price">$100 →</div>
+            </a>
+          </div>
         </div>
       </div>
-      <div class="form-group"><label>Message</label><textarea placeholder="Tell us about your event — venue, number of guests, any special requests..."></textarea></div>
-      <button class="form-submit" onclick="handleSubmit(event)"><span>Send Inquiry ✦</span></button>
+
+      <!-- Success state -->
+      <div class="form-success" id="form-success">
+        <div class="form-success-icon">✦</div>
+        <h3>Message Sent!</h3>
+        <p>We received your inquiry and will get back to you within 24 hours. Check your email for a confirmation.<br><br>Want to lock in your date right now? Pay your deposit below.</p>
+        <div style="margin-top:1.5rem; display:flex; flex-direction:column; gap:0.75rem;">
+          <a href="STRIPE_LINK_2HR" target="_blank" class="btn-primary"><span>Pay $100 Deposit — 2 Hour &#8594;</span></a>
+          <a href="STRIPE_LINK_4HR" target="_blank" class="btn-outline">Pay $100 Deposit — 4 Hour &#8594;</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -914,21 +1346,252 @@
 </footer>
 
 <script>
-  const nav=document.getElementById('nav');
-  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
+// ╔══════════════════════════════════════════════════════╗
+// ║  ALL AROUND CHI-TOWN — SITE CONFIGURATION           ║
+// ║  Fill in your keys after following SETUP.md         ║
+// ╚══════════════════════════════════════════════════════╝
+const SITE_CONFIG = {
+  // ── EmailJS (emailjs.com) ──────────────────────────────
+  emailjs_public_key:  'REPLACE_EMAILJS_PUBLIC_KEY',
+  emailjs_service_id:  'REPLACE_EMAILJS_SERVICE_ID',
+  emailjs_template_id: 'REPLACE_EMAILJS_TEMPLATE_ID',
 
-  function toggleMenu(){document.getElementById('navLinks').classList.toggle('open');}
-  document.querySelectorAll('#navLinks a').forEach(a=>a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open')));
+  // ── Firebase (console.firebase.google.com) ─────────────
+  firebase: {
+    apiKey:     'REPLACE_FIREBASE_API_KEY',
+    authDomain: 'REPLACE.firebaseapp.com',
+    projectId:  'REPLACE_FIREBASE_PROJECT_ID',
+  },
 
-  const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:0.12});
-  document.querySelectorAll('.reveal,.how-step-card').forEach(el=>obs.observe(el));
+  // ── Stripe Payment Links (dashboard.stripe.com) ────────
+  stripe_2hr: 'https://buy.stripe.com/REPLACE_2HR_LINK',
+  stripe_4hr: 'https://buy.stripe.com/REPLACE_4HR_LINK',
 
-  function handleSubmit(e){
-    const btn=e.target;
-    btn.innerHTML='<span>✦ Sent! We\'ll be in touch soon ✦</span>';
-    btn.style.background='#1a3a0e';btn.style.color='#7dff7d';
-    setTimeout(()=>{btn.innerHTML='<span>Send Inquiry ✦</span>';btn.style.background='';btn.style.color='';},4000);
+  // ── Admin (click footer logo 7x fast to enter) ─────────
+  admin_password: 'REPLACE_ADMIN_PASSWORD',
+};
+
+// ── NAV SCROLL ────────────────────────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60));
+function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
+document.querySelectorAll('#navLinks a').forEach(a =>
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+
+// ── REVEAL ON SCROLL ──────────────────────────────────────
+const obs = new IntersectionObserver(entries => entries.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+}), { threshold: 0.12 });
+document.querySelectorAll('.reveal,.how-step-card').forEach(el => obs.observe(el));
+
+// ── FAQ ACCORDION ─────────────────────────────────────────
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const open = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!open) item.classList.add('open');
+}
+
+// ── EMAILJS ───────────────────────────────────────────────
+try { emailjs.init(SITE_CONFIG.emailjs_public_key); } catch(e) {}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const get = id => document.getElementById(id);
+  const firstName = get('f-firstname').value.trim();
+  const lastName  = get('f-lastname').value.trim();
+  const email     = get('f-email').value.trim();
+  const eventType = get('f-eventtype').value;
+  const date      = get('f-date').value;
+  const pkg       = get('f-package').value;
+  const message   = get('f-message').value.trim();
+  const phone     = get('f-phone').value.trim();
+  const errEl     = get('form-error-msg');
+
+  if (!firstName || !lastName || !email || !eventType || !date || !pkg) {
+    errEl.classList.add('show'); return;
   }
+  errEl.classList.remove('show');
+
+  const btn    = get('form-submit-btn');
+  const fields = get('form-fields');
+  btn.innerHTML = '<span>Sending...</span>';
+  fields.classList.add('sending');
+
+  const params = {
+    from_name: `${firstName} ${lastName}`,
+    from_email: email, reply_to: email,
+    phone: phone || 'Not provided',
+    event_type: eventType, event_date: date,
+    package: pkg, message: message || 'No message provided',
+  };
+
+  emailjs.send(SITE_CONFIG.emailjs_service_id, SITE_CONFIG.emailjs_template_id, params)
+    .then(() => {
+      fields.classList.remove('sending');
+      get('form-success').classList.add('show');
+      fields.style.display = 'none';
+    })
+    .catch(err => {
+      console.error('EmailJS error:', err);
+      fields.classList.remove('sending');
+      btn.innerHTML = '<span>Send Inquiry ✦</span>';
+      errEl.textContent = 'Something went wrong. Please try again or reach out on TikTok.';
+      errEl.classList.add('show');
+    });
+}
+
+// Inject Stripe links from config
+document.querySelectorAll('[href="STRIPE_LINK_2HR"]').forEach(el => { el.href = SITE_CONFIG.stripe_2hr; });
+document.querySelectorAll('[href="STRIPE_LINK_4HR"]').forEach(el => { el.href = SITE_CONFIG.stripe_4hr; });
+
+// ── AVAILABILITY CALENDAR ─────────────────────────────────
+let calYear  = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+let calSelectedISO = null;
+let calBookedDates = new Set();
+let calDb          = null;
+let calAdminMode   = false;
+let calAdminClicks = 0;
+let calAdminTimer  = null;
+
+const MONTHS = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+
+// Secret admin: click footer logo 7x quickly
+document.querySelector('.footer-logo').addEventListener('click', () => {
+  calAdminClicks++;
+  clearTimeout(calAdminTimer);
+  calAdminTimer = setTimeout(() => { calAdminClicks = 0; }, 2000);
+  if (calAdminClicks >= 7) {
+    calAdminClicks = 0;
+    const pw = prompt('Admin password:');
+    if (pw === SITE_CONFIG.admin_password) calEnterAdmin();
+    else if (pw !== null) alert('Incorrect password.');
+  }
+});
+
+function calEnterAdmin() {
+  calAdminMode = true;
+  document.getElementById('cal-admin-bar').classList.add('show');
+  calRenderMonth();
+}
+function calExitAdmin() {
+  calAdminMode = false;
+  document.getElementById('cal-admin-bar').classList.remove('show');
+  calRenderMonth();
+}
+
+async function calInit() {
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(SITE_CONFIG.firebase);
+    calDb = firebase.firestore();
+  } catch(e) {
+    console.warn('Firebase not configured — calendar in preview mode.');
+    calDb = null;
+  }
+  calRenderMonth();
+}
+
+async function calLoadBookedDates(year, month) {
+  calBookedDates = new Set();
+  if (!calDb) return;
+  const prefix = `${year}-${String(month + 1).padStart(2, '0')}`;
+  try {
+    const snap = await calDb.collection('booked_dates')
+      .where('date', '>=', prefix + '-01')
+      .where('date', '<=', prefix + '-31').get();
+    snap.forEach(doc => calBookedDates.add(doc.data().date));
+  } catch(e) { console.warn('Calendar read error:', e.message); }
+}
+
+async function calRenderMonth() {
+  document.getElementById('cal-loading').style.display = 'flex';
+  document.getElementById('cal-month-title').textContent = `${MONTHS[calMonth]} ${calYear}`;
+  await calLoadBookedDates(calYear, calMonth);
+  document.getElementById('cal-loading').style.display = 'none';
+
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const container = document.getElementById('cal-days');
+  container.innerHTML = '';
+
+  for (let i = 0; i < firstDay; i++) {
+    const b = document.createElement('div');
+    b.className = 'cal-day empty';
+    container.appendChild(b);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const iso  = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const date = new Date(calYear, calMonth, d);
+    const div  = document.createElement('div');
+    div.textContent = d;
+
+    if (date < today) {
+      div.className = 'cal-day past';
+    } else if (calBookedDates.has(iso)) {
+      div.className = 'cal-day booked';
+      if (calAdminMode) {
+        div.style.cursor = 'pointer';
+        div.title = 'Click to unbook';
+        div.onclick = () => calToggleDate(iso);
+      }
+    } else {
+      div.className = 'cal-day available' + (iso === calSelectedISO ? ' selected' : '');
+      if (date.toDateString() === today.toDateString()) div.classList.add('today');
+      div.onclick = () => calAdminMode ? calToggleDate(iso) : calSelectDate(iso);
+    }
+    container.appendChild(div);
+  }
+}
+
+function calSelectDate(iso) {
+  calSelectedISO = iso;
+  const [y, m, d] = iso.split('-');
+  const friendly = `${MONTHS[parseInt(m) - 1]} ${parseInt(d)}, ${y}`;
+  document.getElementById('cal-selected-date-text').textContent = friendly;
+  document.getElementById('cal-selected-banner').classList.add('show');
+  const dateInput = document.getElementById('f-date');
+  if (dateInput) dateInput.value = iso;
+  calRenderMonth();
+}
+
+function scrollToBooking() {
+  setTimeout(() => {
+    const el = document.getElementById('contact');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, 120);
+}
+
+async function calToggleDate(iso) {
+  if (!calDb) { alert('Firebase not configured yet — see SETUP.md.'); return; }
+  try {
+    const ref = calDb.collection('booked_dates').doc(iso);
+    if (calBookedDates.has(iso)) {
+      await ref.delete();
+      calBookedDates.delete(iso);
+    } else {
+      await ref.set({ date: iso });
+      calBookedDates.add(iso);
+    }
+    calRenderMonth();
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+function calChangeMonth(dir) {
+  calMonth += dir;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  const now = new Date();
+  if (calYear < now.getFullYear() || (calYear === now.getFullYear() && calMonth < now.getMonth())) {
+    calMonth = now.getMonth(); calYear = now.getFullYear();
+  }
+  calRenderMonth();
+}
+
+calInit();
 </script>
 </body>
 </html>
